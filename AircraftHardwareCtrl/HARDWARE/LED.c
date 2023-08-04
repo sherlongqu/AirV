@@ -1,24 +1,24 @@
 //========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
+//	çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤-æ·˜å® https://devotee.taobao.com/
+//	STM32å››è½´çˆ±å¥½è€…QQç¾¤: 810149456
+//	ä½œè€…ï¼šå°åˆ˜
+//	ç”µè¯:13728698082
+//	é‚®ç®±:1042763631@qq.com
+//	æ—¥æœŸï¼š2018.05.17
+//	ç‰ˆæœ¬ï¼šV1.0
 //========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
+//å¥—ä»¶è´­ä¹°åœ°å€ï¼šhttps://devotee.taobao.com/
+//                 çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤
+//ç‰¹æ­¤å£°æ˜ï¼š
 //
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
+//         æ­¤ç¨‹åºåªèƒ½ç”¨ä½œå­¦ä¹ ï¼Œå¦‚ç”¨å•†ä¸šç”¨é€”ã€‚å¿…è¿½ç©¶è´£ä»»ï¼
 //          
 //
 //
 #include "stm32f10x.h"
 #include "LED.h"
 #include "ALL_DATA.h"
-//»úÉíºóµÆ			 
+//æœºèº«åç¯			 
 #define fLED_H()  GPIOB->BSRR = GPIO_Pin_1
 #define fLED_L()  GPIOB->BRR  = GPIO_Pin_1
 #define fLED_Toggle()  GPIOB->ODR ^= GPIO_Pin_1
@@ -28,7 +28,7 @@
 #define hLED_Toggle()  GPIOB->ODR ^= GPIO_Pin_2
 
 //-------------------------------------------------
-//»úÉíÇ°µÆ			 
+//æœºèº«å‰ç¯			 
 #define aLED_H()  GPIOB->BSRR = GPIO_Pin_8
 #define aLED_L()  GPIOB->BRR  = GPIO_Pin_8
 #define aLED_Toggle()  GPIOB->ODR ^= GPIO_Pin_8
@@ -51,7 +51,7 @@ sLED LED = {300,AllFlashLight};  //LED initial statue is off;
 void LEDInit(void)	
 {	
 	GPIO_InitTypeDef GPIO_InitStructure;
-	AFIO->MAPR = 0X02000000; //Ê¹ÄÜ4ÏßÉÕĞ´ ÊÍ·ÅÄ³Ğ©ÓëÉÕĞ´Ïà¹ØµÄÒı½Å
+	AFIO->MAPR = 0X02000000; //ä½¿èƒ½4çº¿çƒ§å†™ é‡Šæ”¾æŸäº›ä¸çƒ§å†™ç›¸å…³çš„å¼•è„š
 	 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB  , ENABLE);
   	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2|GPIO_Pin_8 | GPIO_Pin_9;		     //LED12
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -83,26 +83,26 @@ void PilotLED() //flash 300MS interval
 		LastTime = SysTick_count;
 	switch(LED.status)
 	{
-		case AlwaysOff:      //³£°µ   
+		case AlwaysOff:      //å¸¸æš—   
 			bLED_H();
 			fLED_H();
 			bLED_H();
 			hLED_H();
 			break;
-		case AllFlashLight:				  //È«²¿Í¬Ê±ÉÁË¸
+		case AllFlashLight:				  //å…¨éƒ¨åŒæ—¶é—ªçƒ
 			fLED_Toggle();			
 			bLED_Toggle();
 			hLED_Toggle();			
 			aLED_Toggle();		
 		  break;
-		case AlwaysOn:  //³£ÁÁ
+		case AlwaysOn:  //å¸¸äº®
 			
 		  bLED_L();
 			fLED_L();
 			aLED_L();
 			hLED_L();
 		  break;
-		case AlternateFlash: //½»ÌæÉÁË¸
+		case AlternateFlash: //äº¤æ›¿é—ªçƒ
 			bLED_H();
 			fLED_L();
 			aLED_H();
