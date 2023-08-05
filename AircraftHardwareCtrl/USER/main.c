@@ -1,47 +1,35 @@
 //========================================================================
-//	�����ߵ��ӹ�����-�Ա� https://devotee.taobao.com/
-//	STM32���ᰮ����QQȺ: 810149456
-//	���ߣ�С��
-//	�绰:13728698082
-//	����:1042763631@qq.com
-//	���ڣ�2018.05.17
-//	�汾��V1.0
+//	爱好者电子工作室-淘宝 https://devotee.taobao.com/
+//	STM32四轴爱好者QQ群: 810149456
+//	作者：小刘
+//	电话:13728698082
+//	邮箱:1042763631@qq.com
+//	日期：2018.05.17
+//	版本：V1.0
 //========================================================================
-//�׼������ַ��https://devotee.taobao.com/
-//                 �����ߵ��ӹ�����
-//�ش�������
+// 套件购买地址：https://devotee.taobao.com/
+//                 爱好者电子工作室
+// 特此声明：
 //
-//         �˳���ֻ������ѧϰ��������ҵ��;����׷�����Σ�
-//          
+//         此程序只能用作学习，如用商业用途。必追究责任！
+//
 //
 //
 #include "ALL_DEFINE.h"
 
-
-//�ر��������������˿տ��ĵش��������ڽ��з��С������ǳ�������������ɽ����ر�ң�ء�
-
+// 特别声明：请在无人空旷的地带或者室内进行飞行。遇到非常紧急的情况，可紧急关闭遥控。
 
 int main(void)
-{	
-	cycleCounterInit();  //�õ�ϵͳÿ��us��ϵͳCLK������Ϊ�Ժ���ʱ�������͵õ���׼�ĵ�ǰִ��ʱ��ʹ��
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); //2��bit����ռ���ȼ���2��bit�������ȼ�
-	SysTick_Config(SystemCoreClock / 1000);	//ϵͳ�δ�ʱ��
+{
+	cycleCounterInit();								// 得到系统每个us的系统CLK个数，为以后延时函数，和得到精准的当前执行时间使用
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); // 2个bit的抢占优先级，2个bit的子优先级
+	SysTick_Config(SystemCoreClock / 1000);			// 系统滴答时钟
 
-	ALL_Init();//ϵͳ��ʼ��
+	ALL_Init(); // 系统初始化
 
-	while(1)
+	while (1)
 	{
-		  ANTO_polling(); 	//������λ��
-			PilotLED(); 			//LEDˢ��
+		ANTO_polling(); // 匿名上位机
+		PilotLED();		// LED刷新
 	}
 }
-
-
-
-
-
-
-
-
-
-

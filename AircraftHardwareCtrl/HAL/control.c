@@ -1,158 +1,143 @@
-//========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
-//========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
-//
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
-//          
-//
-//
-#include "ALL_DATA.h" 
-#include "ALL_DEFINE.h" 
-#include "control.h"
-#include "pid.h"
-//------------------------------------------------------------------------------
-#undef NULL
+#ifndef _ALL_USER_DATA_H_
+#define _ALL_USER_DATA_H_
+
+typedef signed char int8_t;
+typedef signed short int int16_t;
+typedef signed int int32_t;
+typedef signed long long int64_t;
+
+/* exact-width unsigned integer types */
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long long uint64_t;
+
 #define NULL 0
-#undef DISABLE 
-#define DISABLE 0
-#undef ENABLE 
-#define ENABLE 1
-#undef REST
-#define REST 0
-#undef SET 
-#define SET 1 
-#undef EMERGENT
-#define EMERGENT 0
-//------------------------------------------------------------------------------
-PidObject *(pPidObject[])={&pidRateX,&pidRateY,&pidRateZ,&pidRoll,&pidPitch,&pidYaw   //½á¹¹ÌåÊı×é£¬½«Ã¿Ò»¸öÊı×é·ÅÒ»¸öpid½á¹¹Ìå£¬ÕâÑù¾Í¿ÉÒÔÅúÁ¿²Ù×÷¸÷¸öPIDµÄÊı¾İÁË  ±ÈÈç½âËøÊ±ÅúÁ¿¸´Î»pid¿ØÖÆÊı¾İ£¬ĞÂÊÖÃ÷°×Õâ¾ä»°µÄ×÷ÓÃ¾Í¿ÉÒÔÁË
-		,&pidHeightRate
-		,&pidHeightHigh
-};
-/**************************************************************
- *  flight control
- * @param[in] 
- * @param[out] 
- * @return     
- ***************************************************************/
-void FlightPidControl(float dt)
+extern volatile uint32_t SysTick_count;
+
+typedef struct
 {
-	volatile static uint8_t status=WAITING_1;
+	int16_t accX;
+	int16_t accY;
+	int16_t accZ;
+	int16_t gyroX;
+	int16_t gyroY;
+	int16_t gyroZ;
+} _st_Mpu;
 
-	switch(status)
-	{		
-		case WAITING_1: //µÈ´ı½âËø
-			if(ALL_flag.unlock)
-			{
-				status = READY_11;	
-			}			
-			break;
-		case READY_11:  //×¼±¸½øÈë¿ØÖÆ
-			pidRest(pPidObject,8); //ÅúÁ¿¸´Î»PIDÊı¾İ£¬·ÀÖ¹ÉÏ´ÎÒÅÁôµÄÊı¾İÓ°Ïì±¾´Î¿ØÖÆ
+typedef struct
+{
+	int16_t magX;
+	int16_t magY;
+	int16_t magZ;
+} _st_Mag;
 
-			Angle.yaw = pidYaw.desired =  pidYaw.measured = 0;   //Ëø¶¨Æ«º½½Ç
-		
-			status = PROCESS_31;
-		
-			break;			
-		case PROCESS_31: //ÕıÊ½½øÈë¿ØÖÆ
-			
-      pidRateX.measured = MPU6050.gyroX * Gyro_G; //ÄÚ»·²âÁ¿Öµ ½Ç¶È/Ãë
-			pidRateY.measured = MPU6050.gyroY * Gyro_G;
-			pidRateZ.measured = MPU6050.gyroZ * Gyro_G;
-		
-			pidPitch.measured = Angle.pitch; //Íâ»·²âÁ¿Öµ µ¥Î»£º½Ç¶È
-		  pidRoll.measured = Angle.roll;
-			pidYaw.measured = Angle.yaw;
-		
-		 	pidUpdate(&pidRoll,dt);    //µ÷ÓÃPID´¦Àíº¯ÊıÀ´´¦ÀíÍâ»·	ºá¹ö½ÇPID		
-			pidRateX.desired = pidRoll.out; //½«Íâ»·µÄPIDÊä³ö×÷ÎªÄÚ»·PIDµÄÆÚÍûÖµ¼´Îª´®¼¶PID
-			pidUpdate(&pidRateX,dt);  //ÔÙµ÷ÓÃÄÚ»·
+typedef struct
+{
+	float rate;
+	float height;
+} High;
 
-		 	pidUpdate(&pidPitch,dt);    //µ÷ÓÃPID´¦Àíº¯ÊıÀ´´¦ÀíÍâ»·	¸©Ñö½ÇPID	
-			pidRateY.desired = pidPitch.out;  
-			pidUpdate(&pidRateY,dt); //ÔÙµ÷ÓÃÄÚ»·
+typedef struct
+{
+	float roll;
+	float pitch;
+	float yaw;
+} _st_AngE;
 
-			CascadePID(&pidRateZ,&pidYaw,dt);	//Ò²¿ÉÒÔÖ±½Óµ÷ÓÃ´®¼¶PIDº¯ÊıÀ´´¦Àí
-			break;
-		case EXIT_255:  //ÍË³ö¿ØÖÆ
-			pidRest(pPidObject,8);
-			status = WAITING_1;//·µ»ØµÈ´ı½âËø
-		  break;
-		default:
-			status = EXIT_255;
-			break;
+typedef struct
+{
+	uint16_t roll;
+	uint16_t pitch;
+	uint16_t thr;
+	uint16_t yaw;
+	uint16_t AUX1;
+	uint16_t AUX2;
+	uint16_t AUX3;
+	uint16_t AUX4;
+} _st_Remote;
+
+typedef volatile struct
+{
+	float desired;		  //< set point
+	float offset;		  //
+	float prevError;	  //< previous error
+	float integ;		  //< integral
+	float kp;			  //< proportional gain
+	float ki;			  //< integral gain
+	float kd;			  //< derivative gain
+	float IntegLimitHigh; //< integral limit
+	float IntegLimitLow;
+	float measured;
+	float out;
+	float OutLimitHigh;
+	float OutLimitLow;
+} PidObject;
+
+typedef volatile struct
+{
+	uint8_t unlock;
+
+} _st_ALL_flag;
+
+extern _st_Remote Remote;
+extern _st_Mpu MPU6050;
+extern _st_Mag AK8975; // ä¿ç•™ï¼Œéœ€å¤–æ¥ç£åŠ›è®¡
+extern _st_AngE Angle;
+
+extern _st_ALL_flag ALL_flag;
+
+extern PidObject pidRateX;
+extern PidObject pidRateY;
+extern PidObject pidRateZ;
+
+extern PidObject pidPitch;
+extern PidObject pidRoll;
+extern PidObject pidYaw;
+
+extern PidObject pidHeightRate;
+extern PidObject pidHeightHigh;
+
+#endif
+
+{
+	status = WAITING_2;
+}
+case WAITING_2: // è§£é”å®Œæˆååˆ¤æ–­ä½¿ç”¨è€…æ˜¯å¦å¼€å§‹æ‹¨åŠ¨é¥æ†è¿›è¡Œé£è¡Œæ§åˆ¶
+if (Remote.thr > 1100)
+{
+	status = PROCESS_31;
+}
+break;
+case PROCESS_31:
+{
+	int16_t temp;
+	temp = Remote.thr - 1000 + pidHeightRate.out; // æ²¹é—¨+å®šé«˜è¾“å‡ºå€¼
+	if (Remote.thr < 1020)						  // æ²¹é—¨å¤ªä½äº†ï¼Œåˆ™é™åˆ¶è¾“å‡º  ä¸ç„¶é£æœºä¹±è½¬
+	{
+		MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = 0;
+		break;
 	}
-	if(ALL_flag.unlock == EMERGENT) //ÒâÍâÇé¿ö£¬ÇëÊ¹ÓÃÒ£¿Ø½ô¼±ÉÏËø£¬·É¿Ø¾Í¿ÉÒÔÔÚÈÎºÎÇé¿öÏÂ½ô¼±ÖĞÖ¹·ÉĞĞ£¬Ëø¶¨·ÉĞĞÆ÷£¬ÍË³öPID¿ØÖÆ
-		status = EXIT_255;
+	MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = LIMIT(temp, 0, 900); // ç•™100ç»™å§¿æ€æ§åˆ¶
+
+	MOTOR1 += +pidRateX.out - pidRateY.out - pidRateZ.out; //; å§¿æ€è¾“å‡ºåˆ†é…ç»™å„ä¸ªç”µæœºçš„æ§åˆ¶é‡
+	MOTOR2 += +pidRateX.out + pidRateY.out + pidRateZ.out; //;
+	MOTOR3 += -pidRateX.out + pidRateY.out - pidRateZ.out;
+	MOTOR4 += -pidRateX.out - pidRateY.out + pidRateZ.out; //;
+}
+break;
+case EXIT_255:
+MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = 0; // å¦‚æœé”å®šï¼Œåˆ™ç”µæœºè¾“å‡ºéƒ½ä¸º0
+status = WAITING_1;
+break;
+default:
+break;
 }
 
+TIM2->CCR1 = LIMIT(MOTOR1, 0, 1000); // æ›´æ–°PWM
+TIM2->CCR2 = LIMIT(MOTOR2, 0, 1000);
+TIM2->CCR3 = LIMIT(MOTOR3, 0, 1000);
+TIM2->CCR4 = LIMIT(MOTOR4, 0, 1000);
+}
 
-int16_t motor[4];
-#define MOTOR1 motor[0] 
-#define MOTOR2 motor[1] 
-#define MOTOR3 motor[2] 
-#define MOTOR4 motor[3] 
-
-void MotorControl(void)
-{	
-	volatile static uint8_t status=WAITING_1;
-	
-	
-	if(ALL_flag.unlock == EMERGENT) //ÒâÍâÇé¿ö£¬ÇëÊ¹ÓÃÒ£¿Ø½ô¼±ÉÏËø£¬·É¿Ø¾Í¿ÉÒÔÔÚÈÎºÎÇé¿öÏÂ½ô¼±ÖĞÖ¹·ÉĞĞ£¬Ëø¶¨·ÉĞĞÆ÷£¬ÍË³öPID¿ØÖÆ
-		status = EXIT_255;	
-	switch(status)
-	{		
-		case WAITING_1: //µÈ´ı½âËø	
-			MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = 0;  //Èç¹ûËø¶¨£¬Ôòµç»úÊä³ö¶¼Îª0
-			if(ALL_flag.unlock)
-			{
-				status = WAITING_2;
-			}
-		case WAITING_2: //½âËøÍê³ÉºóÅĞ¶ÏÊ¹ÓÃÕßÊÇ·ñ¿ªÊ¼²¦¶¯Ò£¸Ë½øĞĞ·ÉĞĞ¿ØÖÆ
-			if(Remote.thr>1100)
-			{
-				status = PROCESS_31;
-			}
-			break;
-		case PROCESS_31:
-			{
-				int16_t temp;
-				temp = Remote.thr -1000 + pidHeightRate.out; //ÓÍÃÅ+¶¨¸ßÊä³öÖµ
-				if(Remote.thr<1020)		//ÓÍÃÅÌ«µÍÁË£¬ÔòÏŞÖÆÊä³ö  ²»È»·É»úÂÒ×ª												
-				{
-					MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4=0;
-					break;
-				}
-				MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = LIMIT(temp,0,900); //Áô100¸ø×ËÌ¬¿ØÖÆ
-
-				MOTOR1 +=    + pidRateX.out - pidRateY.out - pidRateZ.out;//; ×ËÌ¬Êä³ö·ÖÅä¸ø¸÷¸öµç»úµÄ¿ØÖÆÁ¿
-				MOTOR2 +=    + pidRateX.out + pidRateY.out + pidRateZ.out ;//;
-				MOTOR3 +=    - pidRateX.out + pidRateY.out - pidRateZ.out;
-				MOTOR4 +=    - pidRateX.out - pidRateY.out + pidRateZ.out;//;
-			}	
-			break;
-		case EXIT_255:
-			MOTOR1 = MOTOR2 = MOTOR3 = MOTOR4 = 0;  //Èç¹ûËø¶¨£¬Ôòµç»úÊä³ö¶¼Îª0
-			status = WAITING_1;	
-			break;
-		default:
-			break;
-	}
-	
-	
-	TIM2->CCR1 = LIMIT(MOTOR1,0,1000);  //¸üĞÂPWM
-	TIM2->CCR2 = LIMIT(MOTOR2,0,1000);
-	TIM2->CCR3 = LIMIT(MOTOR3,0,1000);
-	TIM2->CCR4 = LIMIT(MOTOR4,0,1000);
-} 
-
-/************************************END OF FILE********************************************/ 
+/************************************END OF FILE********************************************/

@@ -1,66 +1,66 @@
 //========================================================================
-//	�����ߵ��ӹ�����-�Ա� https://devotee.taobao.com/
-//	STM32���ᰮ����QQȺ: 810149456
-//	���ߣ�С��
-//	�绰:13728698082
-//	����:1042763631@qq.com
-//	���ڣ�2018.05.17
-//	�汾��V1.0
+//	爱好者电子工作室-淘宝 https://devotee.taobao.com/
+//	STM32四轴爱好者QQ群: 810149456
+//	作者：小刘
+//	电话:13728698082
+//	邮箱:1042763631@qq.com
+//	日期：2018.05.17
+//	版本：V1.0
 //========================================================================
-//�׼������ַ��https://devotee.taobao.com/
-//                 �����ߵ��ӹ�����
-//�ش�������
+//套件购买地址：https://devotee.taobao.com/
+//                 爱好者电子工作室
+//特此声明：
 //
-//         �˳���ֻ�� ����ѧϰ��������ҵ��;����׷�����Σ�
+//         此程序只能 用作学习，如用商业用途。必追究责任！
 //          
 //
 //
 #include "ALL_DEFINE.h"
 
 
-volatile uint32_t SysTick_count; //ϵͳʱ�����
-_st_Mpu MPU6050;   //MPU6050ԭʼ����
+volatile uint32_t SysTick_count; //系统时间计数
+_st_Mpu MPU6050;   //MPU6050原始数据
 _st_Mag AK8975;
-_st_AngE Angle;    //��ǰ�Ƕ���ֵ̬
-_st_Remote Remote; //ң��ͨ��ֵ
+_st_AngE Angle;    //当前角度姿态值
+_st_Remote Remote; //遥控通道值
 
 
-_st_ALL_flag ALL_flag; //ϵͳ��־λ������������־λ��
+_st_ALL_flag ALL_flag; //系统标志位，包含解锁标志位等
 
 
-PidObject pidRateX; //�ڻ�PID����
+PidObject pidRateX; //内环PID数据
 PidObject pidRateY;
 PidObject pidRateZ;
 
-PidObject pidPitch; //�⻷PID����
+PidObject pidPitch; //外环PID数据
 PidObject pidRoll;
 PidObject pidYaw;
 
 PidObject pidHeightRate;
 PidObject pidHeightHigh;
 
-void pid_param_Init(void); //PID���Ʋ�����ʼ������дPID�����ᱣ�����ݣ��������ɺ�ֱ���ڳ�������� ����¼���ɿ�
+void pid_param_Init(void); //PID控制参数初始化，改写PID并不会保存数据，请调试完成后直接在程序里更改 再烧录到飞控
 
 
 void ALL_Init(void)
 {
 
 
-	IIC_Init();             //I2C��ʼ��
+	IIC_Init();             //I2C初始化
 	
-	pid_param_Init();       //PID������ʼ��
+	pid_param_Init();       //PID参数初始化
 	 
-	LEDInit();              //LED���Ƴ�ʼ��
+	LEDInit();              //LED闪灯初始化
 
-	MpuInit();              //MPU6050��ʼ��
+	MpuInit();              //MPU6050初始化
 	
-	USART3_Config();        //��λ�����ڳ�ʼ��
+	USART3_Config();        //上位机串口初始化
 
-	NRF24L01_init();				//2.4Gң��ͨ�ų�ʼ��
+	NRF24L01_init();				//2.4G遥控通信初始化
 	
-	TIM2_PWM_Config();			//4·PWM��ʼ��
+	TIM2_PWM_Config();			//4路PWM初始化
 	
-	TIM3_Config();					//ϵͳ�������ڳ�ʼ�� 
+	TIM3_Config();					//系统工作周期初始化 
 }
 
 

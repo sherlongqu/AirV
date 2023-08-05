@@ -1,18 +1,18 @@
 //========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
+//	çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤-æ·˜å® https://devotee.taobao.com/
+//	STM32å››è½´çˆ±å¥½è€…QQç¾¤: 810149456
+//	ä½œè€…ï¼šå°åˆ˜
+//	ç”µè¯:13728698082
+//	é‚®ç®±:1042763631@qq.com
+//	æ—¥æœŸï¼š2018.05.17
+//	ç‰ˆæœ¬ï¼šV1.0
 //========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
+// å¥—ä»¶è´­ä¹°åœ°å€ï¼šhttps://devotee.taobao.com/
+//                 çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤
+// ç‰¹æ­¤å£°æ˜ï¼š
 //
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
-//          
+//         æ­¤ç¨‹åºåªèƒ½ç”¨ä½œå­¦ä¹ ï¼Œå¦‚ç”¨å•†ä¸šç”¨é€”ã€‚å¿…è¿½ç©¶è´£ä»»ï¼
+//
 //
 //
 #include "ALL_DATA.h"
@@ -24,191 +24,180 @@
 #include "myMath.h"
 #include "kalman.h"
 
-
-
-#define	SMPLRT_DIV		0x19	//ÍÓÂİÒÇ²ÉÑùÂÊ£¬µäĞÍÖµ£º0x07(125Hz)
-#define	CONFIGL			0x1A	//µÍÍ¨ÂË²¨ÆµÂÊ£¬µäĞÍÖµ£º0x06(5Hz)
-#define	GYRO_CONFIG		0x1B	//ÍÓÂİÒÇ×Ô¼ì¼°²âÁ¿·¶Î§£¬µäĞÍÖµ£º0x18(²»×Ô¼ì£¬2000deg/s)
-#define	ACCEL_CONFIG	0x1C	//¼ÓËÙ¼Æ×Ô¼ì¡¢²âÁ¿·¶Î§¼°¸ßÍ¨ÂË²¨ÆµÂÊ£¬µäĞÍÖµ£º0x01(²»×Ô¼ì£¬2G£¬5Hz)
-#define	ACCEL_ADDRESS	0x3B
-#define	ACCEL_XOUT_H	0x3B
-#define	ACCEL_XOUT_L	0x3C
-#define	ACCEL_YOUT_H	0x3D
-#define	ACCEL_YOUT_L	0x3E
-#define	ACCEL_ZOUT_H	0x3F
-#define	ACCEL_ZOUT_L	0x40
-#define	TEMP_OUT_H		0x41
-#define	TEMP_OUT_L		0x42
-#define	GYRO_XOUT_H		0x43
-#define GYRO_ADDRESS  0x43
-#define	GYRO_XOUT_L		0x44	
-#define	GYRO_YOUT_H		0x45
-#define	GYRO_YOUT_L		0x46
-#define	GYRO_ZOUT_H		0x47
-#define	GYRO_ZOUT_L		0x48
-#define	PWR_MGMT_1		0x6B	//µçÔ´¹ÜÀí£¬µäĞÍÖµ£º0x00(Õı³£ÆôÓÃ)
-#define	WHO_AM_I		  0x75	//IICµØÖ·¼Ä´æÆ÷(Ä¬ÈÏÊıÖµ0x68£¬Ö»¶Á)
+#define SMPLRT_DIV 0x19	  // é™€èºä»ªé‡‡æ ·ç‡ï¼Œå…¸å‹å€¼ï¼š0x07(125Hz)
+#define CONFIGL 0x1A	  // ä½é€šæ»¤æ³¢é¢‘ç‡ï¼Œå…¸å‹å€¼ï¼š0x06(5Hz)
+#define GYRO_CONFIG 0x1B  // é™€èºä»ªè‡ªæ£€åŠæµ‹é‡èŒƒå›´ï¼Œå…¸å‹å€¼ï¼š0x18(ä¸è‡ªæ£€ï¼Œ2000deg/s)
+#define ACCEL_CONFIG 0x1C // åŠ é€Ÿè®¡è‡ªæ£€ã€æµ‹é‡èŒƒå›´åŠé«˜é€šæ»¤æ³¢é¢‘ç‡ï¼Œå…¸å‹å€¼ï¼š0x01(ä¸è‡ªæ£€ï¼Œ2Gï¼Œ5Hz)
+#define ACCEL_ADDRESS 0x3B
+#define ACCEL_XOUT_H 0x3B
+#define ACCEL_XOUT_L 0x3C
+#define ACCEL_YOUT_H 0x3D
+#define ACCEL_YOUT_L 0x3E
+#define ACCEL_ZOUT_H 0x3F
+#define ACCEL_ZOUT_L 0x40
+#define TEMP_OUT_H 0x41
+#define TEMP_OUT_L 0x42
+#define GYRO_XOUT_H 0x43
+#define GYRO_ADDRESS 0x43
+#define GYRO_XOUT_L 0x44
+#define GYRO_YOUT_H 0x45
+#define GYRO_YOUT_L 0x46
+#define GYRO_ZOUT_H 0x47
+#define GYRO_ZOUT_L 0x48
+#define PWR_MGMT_1 0x6B // ç”µæºç®¡ç†ï¼Œå…¸å‹å€¼ï¼š0x00(æ­£å¸¸å¯ç”¨)
+#define WHO_AM_I 0x75	// IICåœ°å€å¯„å­˜å™¨(é»˜è®¤æ•°å€¼0x68ï¼Œåªè¯»)
 #define MPU6050_PRODUCT_ID 0x68
 #define MPU6052C_PRODUCT_ID 0x72
 
-//#define   MPU6050_is_DRY()      GPIO_ReadOutBit(HT_GPIOC, GPIO_PIN_0)//IRQÖ÷»úÊı¾İÊäÈë
-	#ifdef  	USE_I2C_HARDWARE
-		
-		#define MPU6050_ADDRESS 0xD0//0x68
-	#else
-		#define  MPU6050_ADDRESS 0xD0   //IICĞ´ÈëÊ±µÄµØÖ·×Ö½ÚÊı¾İ£¬+1Îª¶ÁÈ¡
-	#endif
+// #define   MPU6050_is_DRY()      GPIO_ReadOutBit(HT_GPIOC, GPIO_PIN_0)//IRQä¸»æœºæ•°æ®è¾“å…¥
+#ifdef USE_I2C_HARDWARE
 
-
+#define MPU6050_ADDRESS 0xD0 // 0x68
+#else
+#define MPU6050_ADDRESS 0xD0 // IICå†™å…¥æ—¶çš„åœ°å€å­—èŠ‚æ•°æ®ï¼Œ+1ä¸ºè¯»å–
+#endif
 
 int16_t MpuOffset[6] = {0};
 
 static volatile int16_t *pMpu = (int16_t *)&MPU6050;
 
-
-
 /****************************************************************************************
-*@brief  
-*@brief   
-*@param[in]
-*****************************************************************************************/
+ *@brief
+ *@brief
+ *@param[in]
+ *****************************************************************************************/
 int8_t mpu6050_rest(void)
 {
-	if(IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x80) == FAILED)
-		return FAILED;	//¸´Î»
+	if (IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x80) == FAILED)
+		return FAILED; // å¤ä½
 	delay_ms(20);
 	return SUCCESS;
 }
 /****************************************************************************************
-*@brief   
-*@brief  
-*@param[in]
-*****************************************************************************************/
-int8_t MpuInit(void) //³õÊ¼»¯
+ *@brief
+ *@brief
+ *@param[in]
+ *****************************************************************************************/
+int8_t MpuInit(void) // åˆå§‹åŒ–
 {
 	uint8_t date = SUCCESS;
 	do
 	{
-	date = IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x80);	//¸´Î»
-	delay_ms(30);
-	date += IIC_Write_One_Byte(MPU6050_ADDRESS, SMPLRT_DIV, 0x02); //ÍÓÂİÒÇ²ÉÑùÂÊ£¬0x00(500Hz)
-	date += IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x03);	//ÉèÖÃÉè±¸Ê±ÖÓÔ´£¬ÍÓÂİÒÇZÖá
-	date += IIC_Write_One_Byte(MPU6050_ADDRESS, CONFIGL, 0x03);   //µÍÍ¨ÂË²¨ÆµÂÊ£¬0x03(42Hz)
-	date += IIC_Write_One_Byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);//+-2000deg/s
-	date += IIC_Write_One_Byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x09);//+-4G
-	}
-	while(date != SUCCESS);
+		date = IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x80); // å¤ä½
+		delay_ms(30);
+		date += IIC_Write_One_Byte(MPU6050_ADDRESS, SMPLRT_DIV, 0x02);	 // é™€èºä»ªé‡‡æ ·ç‡ï¼Œ0x00(500Hz)
+		date += IIC_Write_One_Byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x03);	 // è®¾ç½®è®¾å¤‡æ—¶é’Ÿæºï¼Œé™€èºä»ªZè½´
+		date += IIC_Write_One_Byte(MPU6050_ADDRESS, CONFIGL, 0x03);		 // ä½é€šæ»¤æ³¢é¢‘ç‡ï¼Œ0x03(42Hz)
+		date += IIC_Write_One_Byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);	 //+-2000deg/s
+		date += IIC_Write_One_Byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x09); //+-4G
+	} while (date != SUCCESS);
 	date = IIC_Read_One_Byte(MPU6050_ADDRESS, 0x75);
-	if(date!= MPU6050_PRODUCT_ID)
+	if (date != MPU6050_PRODUCT_ID)
 		return FAILED;
-	else 
+	else
 		MpuGetOffset();
-		return SUCCESS;
+	return SUCCESS;
 }
 /****************************************************************************************
-*@brief    
-*@brief   
-*@param[in]
-*****************************************************************************************/
+ *@brief
+ *@brief
+ *@param[in]
+ *****************************************************************************************/
 
-#define  Gyro_Read() IIC_read_Bytes(MPU6050_ADDRESS, 0X3B,buffer,6)
-#define  Acc_Read() IIC_read_Bytes(MPU6050_ADDRESS, 0x43,&buffer[6],6)
+#define Gyro_Read() IIC_read_Bytes(MPU6050_ADDRESS, 0X3B, buffer, 6)
+#define Acc_Read() IIC_read_Bytes(MPU6050_ADDRESS, 0x43, &buffer[6], 6)
 
-void MpuGetData(void) //¶ÁÈ¡ÍÓÂİÒÇÊı¾İ¼ÓÂË²¨
+void MpuGetData(void) // è¯»å–é™€èºä»ªæ•°æ®åŠ æ»¤æ³¢
 {
-	  uint8_t i;
-    uint8_t buffer[12];
+	uint8_t i;
+	uint8_t buffer[12];
 
-		Gyro_Read();
-	  Acc_Read();
+	Gyro_Read();
+	Acc_Read();
 
-		for(i=0;i<6;i++)
+	for (i = 0; i < 6; i++)
+	{
+		pMpu[i] = (((int16_t)buffer[i << 1] << 8) | buffer[(i << 1) + 1]) - MpuOffset[i];
+		if (i < 3)
 		{
-			pMpu[i] = (((int16_t)buffer[i<<1] << 8) | buffer[(i<<1)+1])-MpuOffset[i];		
-			if(i < 3)
 			{
-				{
-					static struct _1_ekf_filter ekf[3] = {{0.02,0,0,0,0.001,0.543},{0.02,0,0,0,0.001,0.543},{0.02,0,0,0,0.001,0.543}};	
-					kalman_1(&ekf[i],(float)pMpu[i]);  //Ò»Î¬¿¨¶ûÂü
-					pMpu[i] = (int16_t)ekf[i].out;
-				}
+				static struct _1_ekf_filter ekf[3] = {{0.02, 0, 0, 0, 0.001, 0.543}, {0.02, 0, 0, 0, 0.001, 0.543}, {0.02, 0, 0, 0, 0.001, 0.543}};
+				kalman_1(&ekf[i], (float)pMpu[i]); // ä¸€ç»´å¡å°”æ›¼
+				pMpu[i] = (int16_t)ekf[i].out;
+			}
 		}
-		if(i > 2)
-		{	
-			uint8_t k=i-3;
-			const float factor = 0.15f;  //ÂË²¨ÒòËØ			
-			static float tBuff[3];		
+		if (i > 2)
+		{
+			uint8_t k = i - 3;
+			const float factor = 0.15f; // æ»¤æ³¢å› ç´ 
+			static float tBuff[3];
 
-			pMpu[i] = tBuff[k] = tBuff[k] * (1 - factor) + pMpu[i] * factor;                
+			pMpu[i] = tBuff[k] = tBuff[k] * (1 - factor) + pMpu[i] * factor;
 		}
 	}
 }
 
 /****************************************************************************************
-*@brief   get mpu offset
-*@brief   initial and cmd call this
-*@param[in]
-*****************************************************************************************/
-void MpuGetOffset(void) //Ğ£×¼
+ *@brief   get mpu offset
+ *@brief   initial and cmd call this
+ *@param[in]
+ *****************************************************************************************/
+void MpuGetOffset(void) // æ ¡å‡†
 {
-	int32_t buffer[6]={0};
-	int16_t i;  
-	uint8_t k=30;
+	int32_t buffer[6] = {0};
+	int16_t i;
+	uint8_t k = 30;
 	const int8_t MAX_GYRO_QUIET = 5;
-	const int8_t MIN_GYRO_QUIET = -5;	
-/*           wait for calm down    	                                                          */
+	const int8_t MIN_GYRO_QUIET = -5;
+	/*           wait for calm down    	                                                          */
 	int16_t LastGyro[3] = {0};
-	int16_t ErrorGyro[3];	
+	int16_t ErrorGyro[3];
 	/*           set offset initial to zero    		*/
-	
-	memset(MpuOffset,0,12);
-	MpuOffset[2] = 8192;   //set offset from the 8192  
-	
-	TIM_ITConfig(  //Ê¹ÄÜ»òÕßÊ§ÄÜÖ¸¶¨µÄTIMÖĞ¶Ï
-		TIM3, //TIM2
-		TIM_IT_Update ,
-		DISABLE  //Ê¹ÄÜ
-		);	
-	while(k--)
+
+	memset(MpuOffset, 0, 12);
+	MpuOffset[2] = 8192; // set offset from the 8192
+
+	TIM_ITConfig( // ä½¿èƒ½æˆ–è€…å¤±èƒ½æŒ‡å®šçš„TIMä¸­æ–­
+		TIM3,	  // TIM2
+		TIM_IT_Update,
+		DISABLE // ä½¿èƒ½
+	);
+	while (k--)
 	{
 		do
 		{
 			delay_ms(10);
 			MpuGetData();
-			for(i=0;i<3;i++)
+			for (i = 0; i < 3; i++)
 			{
-				ErrorGyro[i] = pMpu[i+3] - LastGyro[i];
-				LastGyro[i] = pMpu[i+3];	
-			}			
-		}while ((ErrorGyro[0] >  MAX_GYRO_QUIET )|| (ErrorGyro[0] < MIN_GYRO_QUIET)
-					||(ErrorGyro[1] > MAX_GYRO_QUIET )|| (ErrorGyro[1] < MIN_GYRO_QUIET)
-					||(ErrorGyro[2] > MAX_GYRO_QUIET )|| (ErrorGyro[2] < MIN_GYRO_QUIET)
-						);
-	}	
+				ErrorGyro[i] = pMpu[i + 3] - LastGyro[i];
+				LastGyro[i] = pMpu[i + 3];
+			}
+		} while ((ErrorGyro[0] > MAX_GYRO_QUIET) || (ErrorGyro[0] < MIN_GYRO_QUIET) || (ErrorGyro[1] > MAX_GYRO_QUIET) || (ErrorGyro[1] < MIN_GYRO_QUIET) || (ErrorGyro[2] > MAX_GYRO_QUIET) || (ErrorGyro[2] < MIN_GYRO_QUIET));
+	}
 
-/*           throw first 100  group data and make 256 group average as offset                    */	
-	for(i=0;i<356;i++)
-	{		
+	/*           throw first 100  group data and make 256 group average as offset                    */
+	for (i = 0; i < 356; i++)
+	{
 		MpuGetData();
-		if(100 <= i)
+		if (100 <= i)
 		{
 			uint8_t k;
-			for(k=0;k<6;k++)
+			for (k = 0; k < 6; k++)
 			{
 				buffer[k] += pMpu[k];
 			}
 		}
 	}
 
-	for(i=0;i<6;i++)
+	for (i = 0; i < 6; i++)
 	{
-		MpuOffset[i] = buffer[i]>>8;
+		MpuOffset[i] = buffer[i] >> 8;
 	}
-	TIM_ITConfig(  //Ê¹ÄÜ»òÕßÊ§ÄÜÖ¸¶¨µÄTIMÖĞ¶Ï
-		TIM3, //TIM2
-		TIM_IT_Update ,
-		ENABLE  //Ê¹ÄÜ
-		);
+	TIM_ITConfig( // ä½¿èƒ½æˆ–è€…å¤±èƒ½æŒ‡å®šçš„TIMä¸­æ–­
+		TIM3,	  // TIM2
+		TIM_IT_Update,
+		ENABLE // ä½¿èƒ½
+	);
 }
 /**************************************END OF FILE*************************************/
-

@@ -1,17 +1,17 @@
 //========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
+//	çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤-æ·˜å® https://devotee.taobao.com/
+//	STM32å››è½´çˆ±å¥½è€…QQç¾¤: 810149456
+//	ä½œè€…ï¼šå°åˆ˜
+//	ç”µè¯:13728698082
+//	é‚®ç®±:1042763631@qq.com
+//	æ—¥æœŸï¼š2018.05.17
+//	ç‰ˆæœ¬ï¼šV1.0
 //========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
+//å¥—ä»¶è´­ä¹°åœ°å€ï¼šhttps://devotee.taobao.com/
+//                 çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤
+//ç‰¹æ­¤å£°æ˜ï¼š
 //
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
+//         æ­¤ç¨‹åºåªèƒ½ç”¨ä½œå­¦ä¹ ï¼Œå¦‚ç”¨å•†ä¸šç”¨é€”ã€‚å¿…è¿½ç©¶è´£ä»»ï¼
 //          
 //
 //
@@ -25,7 +25,7 @@ void SPI_Config(void)
 
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);  
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO  , ENABLE);
-		GPIO_SetBits(GPIOB, GPIO_Pin_12); //NRF_CSÔ¤ÖÃÎª¸ß 
+		GPIO_SetBits(GPIOB, GPIO_Pin_12); //NRF_CSé¢„ç½®ä¸ºé«˜ 
 		
 	  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15; 
 	  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
@@ -33,7 +33,7 @@ void SPI_Config(void)
 	  	GPIO_Init(GPIOB, &GPIO_InitStructure); 
 
         /* SPI2 configuration */
-        SPI_Cmd(SPI2, DISABLE);             //±ØĞëÏÈ½ûÄÜ,²ÅÄÜ¸Ä±äMODE
+        SPI_Cmd(SPI2, DISABLE);             //å¿…é¡»å…ˆç¦èƒ½,æ‰èƒ½æ”¹å˜MODE
         SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
         SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
         SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;

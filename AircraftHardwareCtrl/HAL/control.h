@@ -70,21 +70,21 @@
 #define PROCESS_60 60
 
 
-#define CHECK_100 100 //У��
+#define CHECK_100 100 //校验
 #define CHECK_101 101
 #define CHECK_102 102
 #define CHECK_103 103
 #define CHECK_104 105
 #define CHECK_105 106
 
-#define CALIBRATION_110 110 //У׼
+#define CALIBRATION_110 110 //校准
 #define CALIBRATION_111 111
 #define CALIBRATION_112 112
 #define CALIBRATION_113 113
 #define CALIBRATION_114 114
 #define CALIBRATION_115 115 
 
-#define EXIT_255 255  //�˳�
+#define EXIT_255 255  //退出
 #define EXIT_254 254
 #define EXIT_253 253
 #define EXIT_252 252

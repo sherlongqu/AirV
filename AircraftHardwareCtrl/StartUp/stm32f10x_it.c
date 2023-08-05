@@ -139,7 +139,7 @@ void PendSV_Handler(void)
 //	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 //	{ 	
 //	    code=USART_ReceiveData(USART1);
-//	  	printf("%c",code);    //½«½ÓÊÜµ½µÄÊı¾İÖ±½Ó·µ»Ø´òÓ¡
+//	  	printf("%c",code);    //å°†æ¥å—åˆ°çš„æ•°æ®ç›´æ¥è¿”å›æ‰“å°
 //	} 
 //	 
 //}

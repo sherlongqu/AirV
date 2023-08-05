@@ -1,18 +1,18 @@
 //========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
+//	çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤-æ·˜å® https://devotee.taobao.com/
+//	STM32å››è½´çˆ±å¥½è€…QQç¾¤: 810149456
+//	ä½œè€…ï¼šå°åˆ˜
+//	ç”µè¯:13728698082
+//	é‚®ç®±:1042763631@qq.com
+//	æ—¥æœŸï¼š2018.05.17
+//	ç‰ˆæœ¬ï¼šV1.0
 //========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
+// å¥—ä»¶è´­ä¹°åœ°å€ï¼šhttps://devotee.taobao.com/
+//                 çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤
+// ç‰¹æ­¤å£°æ˜ï¼š
 //
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
-//          
+//         æ­¤ç¨‹åºåªèƒ½ç”¨ä½œå­¦ä¹ ï¼Œå¦‚ç”¨å•†ä¸šç”¨é€”ã€‚å¿…è¿½ç©¶è´£ä»»ï¼
+//
 //
 //
 #include "ALL_DATA.h"
@@ -23,166 +23,156 @@
 #include "LED.h"
 #include "Remote.h"
 
-
 #define SUCCESS 0
 #undef FAILED
-#define FAILED  1
+#define FAILED 1
 /*****************************************************************************************
- *  Í¨µÀÊı¾İ´¦Àí
- * @param[in] 
- * @param[out] 
- * @return     
- ******************************************************************************************/	
-	uint8_t RC_rxData[32];
-void remote_unlock(void);	
-void RC_Analy(void)  
+ *  é€šé“æ•°æ®å¤„ç†
+ * @param[in]
+ * @param[out]
+ * @return
+ ******************************************************************************************/
+uint8_t RC_rxData[32];
+void remote_unlock(void);
+void RC_Analy(void)
 {
-		static uint16_t cnt;
-/*             Receive  and check RC data                               */	
-	if(NRF24L01_RxPacket(RC_rxData)==SUCCESS)
-	{ 	
+	static uint16_t cnt;
+	/*             Receive  and check RC data                               */
+	if (NRF24L01_RxPacket(RC_rxData) == SUCCESS)
+	{
 
 		uint8_t i;
-		uint8_t CheckSum=0;
+		uint8_t CheckSum = 0;
 		cnt = 0;
-		for(i=0;i<31;i++)
+		for (i = 0; i < 31; i++)
 		{
-			CheckSum +=  RC_rxData[i];
+			CheckSum += RC_rxData[i];
 		}
-		if(RC_rxData[31]==CheckSum && RC_rxData[0]==0xAA && RC_rxData[1]==0xAF)  //Èç¹û½ÓÊÕµ½µÄÒ£¿ØÊı¾İÕıÈ·
+		if (RC_rxData[31] == CheckSum && RC_rxData[0] == 0xAA && RC_rxData[1] == 0xAF) // å¦‚æœæ¥æ”¶åˆ°çš„é¥æ§æ•°æ®æ­£ç¡®
 		{
-			  Remote.roll = ((uint16_t)RC_rxData[4]<<8) | RC_rxData[5];  //Í¨µÀ1
-				LIMIT(Remote.roll,1000,2000);
-				Remote.pitch = ((uint16_t)RC_rxData[6]<<8) | RC_rxData[7];  //Í¨µÀ2
-				LIMIT(Remote.pitch,1000,2000);
-				Remote.thr = 	((uint16_t)RC_rxData[8]<<8) | RC_rxData[9];   //Í¨µÀ3
-				LIMIT(Remote.thr,1000,2000);
-				Remote.yaw =  ((uint16_t)RC_rxData[10]<<8) | RC_rxData[11];   //Í¨µÀ4
-				LIMIT(Remote.yaw,1000,2000);
-				Remote.AUX1 =  ((uint16_t)RC_rxData[12]<<8) | RC_rxData[13];   //Í¨µÀ5  ×óÉÏ½Ç°´¼ü¶¼ÊôÓÚÍ¨µÀ5  
-				LIMIT(Remote.AUX1,1000,2000);
-				Remote.AUX2 =  ((uint16_t)RC_rxData[14]<<8) | RC_rxData[15];   //Í¨µÀ6  ÓÒÉÏ½Ç°´¼ü¶¼ÊôÓÚÍ¨µÀ6 
-				LIMIT(Remote.AUX2,1000,2000);
-				Remote.AUX3 =  ((uint16_t)RC_rxData[16]<<8) | RC_rxData[17];   //Í¨µÀ7  ×óÏÂ±ß°´¼ü¶¼ÊôÓÚÍ¨µÀ7 
-				LIMIT(Remote.AUX1,1000,2000);
-				Remote.AUX4 =  ((uint16_t)RC_rxData[18]<<8) | RC_rxData[19];   //Í¨µÀ8  ÓÒÏÂ±ß°´¼ü¶¼ÊôÓÚÍ¨µÀ6  
-				LIMIT(Remote.AUX2,1000,2000);		
-				
+			Remote.roll = ((uint16_t)RC_rxData[4] << 8) | RC_rxData[5]; // é€šé“1
+			LIMIT(Remote.roll, 1000, 2000);
+			Remote.pitch = ((uint16_t)RC_rxData[6] << 8) | RC_rxData[7]; // é€šé“2
+			LIMIT(Remote.pitch, 1000, 2000);
+			Remote.thr = ((uint16_t)RC_rxData[8] << 8) | RC_rxData[9]; // é€šé“3
+			LIMIT(Remote.thr, 1000, 2000);
+			Remote.yaw = ((uint16_t)RC_rxData[10] << 8) | RC_rxData[11]; // é€šé“4
+			LIMIT(Remote.yaw, 1000, 2000);
+			Remote.AUX1 = ((uint16_t)RC_rxData[12] << 8) | RC_rxData[13]; // é€šé“5  å·¦ä¸Šè§’æŒ‰é”®éƒ½å±äºé€šé“5
+			LIMIT(Remote.AUX1, 1000, 2000);
+			Remote.AUX2 = ((uint16_t)RC_rxData[14] << 8) | RC_rxData[15]; // é€šé“6  å³ä¸Šè§’æŒ‰é”®éƒ½å±äºé€šé“6
+			LIMIT(Remote.AUX2, 1000, 2000);
+			Remote.AUX3 = ((uint16_t)RC_rxData[16] << 8) | RC_rxData[17]; // é€šé“7  å·¦ä¸‹è¾¹æŒ‰é”®éƒ½å±äºé€šé“7
+			LIMIT(Remote.AUX1, 1000, 2000);
+			Remote.AUX4 = ((uint16_t)RC_rxData[18] << 8) | RC_rxData[19]; // é€šé“8  å³ä¸‹è¾¹æŒ‰é”®éƒ½å±äºé€šé“6
+			LIMIT(Remote.AUX2, 1000, 2000);
+
+			{
+				const float roll_pitch_ratio = 0.04f;
+				const float yaw_ratio = 0.0015f;
+
+				pidPitch.desired = -(Remote.pitch - 1500) * roll_pitch_ratio; // å°†é¥æ†å€¼ä½œä¸ºé£è¡Œè§’åº¦çš„æœŸæœ›å€¼
+				pidRoll.desired = -(Remote.roll - 1500) * roll_pitch_ratio;
+				if (Remote.yaw > 1820)
 				{
-							const float roll_pitch_ratio = 0.04f;
-							const float yaw_ratio =  0.0015f;    
-					
-							pidPitch.desired =-(Remote.pitch-1500)*roll_pitch_ratio;	 //½«Ò£¸ËÖµ×÷Îª·ÉĞĞ½Ç¶ÈµÄÆÚÍûÖµ
-							pidRoll.desired = -(Remote.roll-1500)*roll_pitch_ratio;
-					    if(Remote.yaw>1820)
-							{
-								pidYaw.desired += 0.75f;	
-							}
-							else if(Remote.yaw <1180)
-							{
-								pidYaw.desired -= 0.75f;	
-							}						
+					pidYaw.desired += 0.75f;
 				}
-				remote_unlock();
-			
+				else if (Remote.yaw < 1180)
+				{
+					pidYaw.desired -= 0.75f;
+				}
+			}
+			remote_unlock();
 		}
-  }
-//Èç¹û3ÃëÃ»ÊÕµ½Ò£¿ØÊı¾İ£¬ÔòÅĞ¶ÏÒ£¿ØĞÅºÅ¶ªÊ§£¬·É¿ØÔÚÈÎºÎÊ±ºòÍ£Ö¹·ÉĞĞ£¬±ÜÃâÉËÈË¡£
-//ÒâÍâÇé¿ö£¬Ê¹ÓÃÕß¿É½ô¼±¹Ø±ÕÒ£¿ØµçÔ´£¬·ÉĞĞÆ÷»áÔÚ3ÃëºóÁ¢¼´¹Ø±Õ£¬±ÜÃâÉËÈË¡£
-//Á¢¼´¹Ø±ÕÒ£¿Ø£¬Èç¹ûÔÚ·ÉĞĞÖĞ»áÖ±½ÓµôÂä£¬¿ÉÄÜ»áËğ»µ·ÉĞĞÆ÷¡£
+	}
+	// å¦‚æœ3ç§’æ²¡æ”¶åˆ°é¥æ§æ•°æ®ï¼Œåˆ™åˆ¤æ–­é¥æ§ä¿¡å·ä¸¢å¤±ï¼Œé£æ§åœ¨ä»»ä½•æ—¶å€™åœæ­¢é£è¡Œï¼Œé¿å…ä¼¤äººã€‚
+	// æ„å¤–æƒ…å†µï¼Œä½¿ç”¨è€…å¯ç´§æ€¥å…³é—­é¥æ§ç”µæºï¼Œé£è¡Œå™¨ä¼šåœ¨3ç§’åç«‹å³å…³é—­ï¼Œé¿å…ä¼¤äººã€‚
+	// ç«‹å³å…³é—­é¥æ§ï¼Œå¦‚æœåœ¨é£è¡Œä¸­ä¼šç›´æ¥æ‰è½ï¼Œå¯èƒ½ä¼šæŸåé£è¡Œå™¨ã€‚
 	else
 	{
-	
-		
+
 		cnt++;
-		if(cnt>800)
+		if (cnt > 800)
 		{
 			cnt = 0;
-			ALL_flag.unlock = 0; 
+			ALL_flag.unlock = 0;
 			NRF24L01_init();
 		}
 	}
 }
 
 /*****************************************************************************************
- *  ½âËøÅĞ¶Ï
- * @param[in] 
- * @param[out] 
- * @return     
- ******************************************************************************************/	
+ *  è§£é”åˆ¤æ–­
+ * @param[in]
+ * @param[out]
+ * @return
+ ******************************************************************************************/
 void remote_unlock(void)
 {
-	volatile static uint8_t status=WAITING_1;
-	static uint16_t cnt=0;
+	volatile static uint8_t status = WAITING_1;
+	static uint16_t cnt = 0;
 
-	if(Remote.thr<1200 &&Remote.yaw<1200)                         //ÓÍÃÅÒ£¸Ë×óÏÂ½ÇËø¶¨
+	if (Remote.thr < 1200 && Remote.yaw < 1200) // æ²¹é—¨é¥æ†å·¦ä¸‹è§’é”å®š
 	{
 		status = EXIT_255;
 	}
-	
-	switch(status)
+
+	switch (status)
 	{
-		case WAITING_1://µÈ´ı½âËø
-			if(Remote.thr<1150)           //½âËøÈı²½×à£¬ÓÍÃÅ×îµÍ->ÓÍÃÅ×î¸ß->ÓÍÃÅ×îµÍ ¿´µ½LEDµÆ²»ÉÁÁË ¼´Íê³É½âËø
-			{			 
-					 status = WAITING_2;				 
-			}		
-			break;
-		case WAITING_2:
-			if(Remote.thr>1800)          
-			{		
-						static uint8_t cnt = 0;
-					 	cnt++;		
-						if(cnt>5) //×î¸ßÓÍÃÅĞè±£³Ö200msÒÔÉÏ£¬·ÀÖ¹Ò£¿Ø¿ª»ú³õÊ¼»¯Î´Íê³ÉµÄ´íÎóÊı¾İ
-						{	
-								cnt=0;
-								status = WAITING_3;
-						}
-			}			
-			break;
-		case WAITING_3:
-			if(Remote.thr<1150)          
-			{			 
-					 status = WAITING_4;				 
-			}			
-			break;			
-		case WAITING_4:	//½âËøÇ°×¼±¸	               
-				ALL_flag.unlock = 1;
-				status = PROCESS_31;
-				LED.status = AlwaysOn;									
-				 break;		
-		case PROCESS_31:	//½øÈë½âËø×´Ì¬
-				if(Remote.thr<1020)
-				{
-					if(cnt++ > 2000)                                     // ÓÍÃÅÒ£¸Ë´¦ÓÚ×îµÍ6S×Ô¶¯ÉÏËø
-					{								
-						status = EXIT_255;								
-					}
-				}
-				else if(!ALL_flag.unlock)                           //Other conditions lock 
-				{
-					status = EXIT_255;				
-				}
-				else					
-					cnt = 0;
-			break;
-		case EXIT_255: //½øÈëËø¶¨
-			LED.status = AllFlashLight;	                                 //exit
-			cnt = 0;
-			LED.FlashTime = 100; //100*3ms		
-			ALL_flag.unlock = 0;
-			status = WAITING_1;
-			break;
-		default:
+	case WAITING_1:			   // ç­‰å¾…è§£é”
+		if (Remote.thr < 1150) // è§£é”ä¸‰æ­¥å¥ï¼Œæ²¹é—¨æœ€ä½->æ²¹é—¨æœ€é«˜->æ²¹é—¨æœ€ä½ çœ‹åˆ°LEDç¯ä¸é—ªäº† å³å®Œæˆè§£é”
+		{
+			status = WAITING_2;
+		}
+		break;
+	case WAITING_2:
+		if (Remote.thr > 1800)
+		{
+			static uint8_t cnt = 0;
+			cnt++;
+			if (cnt > 5) // æœ€é«˜æ²¹é—¨éœ€ä¿æŒ200msä»¥ä¸Šï¼Œé˜²æ­¢é¥æ§å¼€æœºåˆå§‹åŒ–æœªå®Œæˆçš„é”™è¯¯æ•°æ®
+			{
+				cnt = 0;
+				status = WAITING_3;
+			}
+		}
+		break;
+	case WAITING_3:
+		if (Remote.thr < 1150)
+		{
+			status = WAITING_4;
+		}
+		break;
+	case WAITING_4: // è§£é”å‰å‡†å¤‡
+		ALL_flag.unlock = 1;
+		status = PROCESS_31;
+		LED.status = AlwaysOn;
+		break;
+	case PROCESS_31: // è¿›å…¥è§£é”çŠ¶æ€
+		if (Remote.thr < 1020)
+		{
+			if (cnt++ > 2000) // æ²¹é—¨é¥æ†å¤„äºæœ€ä½6Sè‡ªåŠ¨ä¸Šé”
+			{
+				status = EXIT_255;
+			}
+		}
+		else if (!ALL_flag.unlock) // Other conditions lock
+		{
 			status = EXIT_255;
-			break;
+		}
+		else
+			cnt = 0;
+		break;
+	case EXIT_255:					// è¿›å…¥é”å®š
+		LED.status = AllFlashLight; // exit
+		cnt = 0;
+		LED.FlashTime = 100; // 100*3ms
+		ALL_flag.unlock = 0;
+		status = WAITING_1;
+		break;
+	default:
+		status = EXIT_255;
+		break;
 	}
 }
 /***********************END OF FILE*************************************/
-
-
-
-
-
-
-

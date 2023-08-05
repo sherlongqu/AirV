@@ -1,17 +1,17 @@
 //========================================================================
-//	°®ºÃÕßµç×Ó¹¤×÷ÊÒ-ÌÔ±¦ https://devotee.taobao.com/
-//	STM32ËÄÖá°®ºÃÕßQQÈº: 810149456
-//	×÷Õß£ºĞ¡Áõ
-//	µç»°:13728698082
-//	ÓÊÏä:1042763631@qq.com
-//	ÈÕÆÚ£º2018.05.17
-//	°æ±¾£ºV1.0
+//	çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤-æ·˜å® https://devotee.taobao.com/
+//	STM32å››è½´çˆ±å¥½è€…QQç¾¤: 810149456
+//	ä½œè€…ï¼šå°åˆ˜
+//	ç”µè¯:13728698082
+//	é‚®ç®±:1042763631@qq.com
+//	æ—¥æœŸï¼š2018.05.17
+//	ç‰ˆæœ¬ï¼šV1.0
 //========================================================================
-//Ì×¼ş¹ºÂòµØÖ·£ºhttps://devotee.taobao.com/
-//                 °®ºÃÕßµç×Ó¹¤×÷ÊÒ
-//ÌØ´ËÉùÃ÷£º
+//å¥—ä»¶è´­ä¹°åœ°å€ï¼šhttps://devotee.taobao.com/
+//                 çˆ±å¥½è€…ç”µå­å·¥ä½œå®¤
+//ç‰¹æ­¤å£°æ˜ï¼š
 //
-//         ´Ë³ÌĞòÖ»ÄÜÓÃ×÷Ñ§Ï°£¬ÈçÓÃÉÌÒµÓÃÍ¾¡£±Ø×·¾¿ÔğÈÎ£¡
+//         æ­¤ç¨‹åºåªèƒ½ç”¨ä½œå­¦ä¹ ï¼Œå¦‚ç”¨å•†ä¸šç”¨é€”ã€‚å¿…è¿½ç©¶è´£ä»»ï¼
 //          
 //
 //
@@ -21,59 +21,59 @@
 #include "stdio.h"
 
 /*
- * º¯ÊıÃû£ºUSART1_Config
- * ÃèÊö  £ºUSART1 GPIO ÅäÖÃ,¹¤×÷Ä£Ê½ÅäÖÃ¡£
- * ÊäÈë  £ºÎŞ
- * Êä³ö  : ÎŞ
- * µ÷ÓÃ  £ºÍâ²¿µ÷ÓÃ
+ * å‡½æ•°åï¼šUSART1_Config
+ * æè¿°  ï¼šUSART1 GPIO é…ç½®,å·¥ä½œæ¨¡å¼é…ç½®ã€‚
+ * è¾“å…¥  ï¼šæ— 
+ * è¾“å‡º  : æ— 
+ * è°ƒç”¨  ï¼šå¤–éƒ¨è°ƒç”¨
  */
 void USART3_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure; 
-	/* ÅäÖÃ´®¿Ú1 £¨USART1£© Ê±ÖÓ*/
+	/* é…ç½®ä¸²å£1 ï¼ˆUSART1ï¼‰ æ—¶é’Ÿ*/
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3 | RCC_APB2Periph_GPIOB, ENABLE);
 	
 	/* Configure the NVIC Preemption Priority Bits */  
 
 	
-	/* Ê¹ÄÜ´®¿Ú1ÖĞ¶Ï */
-	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;	//USART1  ´®¿Ú1È«¾ÖÖĞ¶Ï 
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//ÇÀÕ¼ÓÅÏÈ¼¶1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; //×ÓÓÅÏÈ¼¶1
-	/*IRQÍ¨µÀÊ¹ÄÜ*/
+	/* ä½¿èƒ½ä¸²å£1ä¸­æ–­ */
+	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;	//USART1  ä¸²å£1å…¨å±€ä¸­æ–­ 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//æŠ¢å ä¼˜å…ˆçº§1
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; //å­ä¼˜å…ˆçº§1
+	/*IRQé€šé“ä½¿èƒ½*/
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	/*¸ù¾İNVIC_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèNVIC¼Ä´æÆ÷USART1*/
+	/*æ ¹æ®NVIC_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾NVICå¯„å­˜å™¨USART1*/
 	NVIC_Init(&NVIC_InitStructure);
 	
 	
 
-	/*´®¿ÚGPIO¶Ë¿ÚÅäÖÃ*/
-  /* ÅäÖÃ´®¿Ú1 £¨USART1 Tx (PA.09)£©*/
+	/*ä¸²å£GPIOç«¯å£é…ç½®*/
+  /* é…ç½®ä¸²å£1 ï¼ˆUSART1 Tx (PA.09)ï¼‰*/
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
   
-	/* ÅäÖÃ´®¿Ú1 USART1 Rx (PA.10)*/
+	/* é…ç½®ä¸²å£1 USART1 Rx (PA.10)*/
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	
-	//USART ³õÊ¼»¯ÉèÖÃ
-	USART_InitStructure.USART_BaudRate =500000;//´®¿Ú²¨ÌØÂÊ
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//×Ö³¤Îª8Î»Êı¾İ¸ñÊ½
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;//Ò»¸öÍ£Ö¹Î»
-	USART_InitStructure.USART_Parity = USART_Parity_No;//ÎŞÆæÅ¼Ğ£ÑéÎ»
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//ÎŞÓ²¼şÊı¾İÁ÷¿ØÖÆ
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//ÊÕ·¢Ä£Ê½
+	//USART åˆå§‹åŒ–è®¾ç½®
+	USART_InitStructure.USART_BaudRate =500000;//ä¸²å£æ³¢ç‰¹ç‡
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//å­—é•¿ä¸º8ä½æ•°æ®æ ¼å¼
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;//ä¸€ä¸ªåœæ­¢ä½
+	USART_InitStructure.USART_Parity = USART_Parity_No;//æ— å¥‡å¶æ ¡éªŒä½
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//æ— ç¡¬ä»¶æ•°æ®æµæ§åˆ¶
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//æ”¶å‘æ¨¡å¼
 	USART_Init(USART3, &USART_InitStructure);
 	
-	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//¿ªÆôÖĞ¶Ï
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//å¼€å¯ä¸­æ–­
 	
-	USART_Cmd(USART3, ENABLE); //Ê¹ÄÜ´®¿Ú 
+	USART_Cmd(USART3, ENABLE); //ä½¿èƒ½ä¸²å£ 
 }
 
 
@@ -117,15 +117,15 @@ void USART1_setBaudRate(uint32_t baudRate)
 
 
 /*
- * º¯ÊıÃû£ºfputc
- * ÃèÊö  £ºÖØ¶¨Ïòc¿âº¯Êıprintfµ½USART1
- * ÊäÈë  £ºÎŞ
- * Êä³ö  £ºÎŞ
- * µ÷ÓÃ  £ºÓÉprintfµ÷ÓÃ
+ * å‡½æ•°åï¼šfputc
+ * æè¿°  ï¼šé‡å®šå‘cåº“å‡½æ•°printfåˆ°USART1
+ * è¾“å…¥  ï¼šæ— 
+ * è¾“å‡º  ï¼šæ— 
+ * è°ƒç”¨  ï¼šç”±printfè°ƒç”¨
  */
 int fputc(int ch, FILE *f)
 {
-	/* ½«PrintfÄÚÈİ·¢Íù´®¿Ú */
+	/* å°†Printfå†…å®¹å‘å¾€ä¸²å£ */
 	USART_SendData(USART1, (unsigned char) ch);
 	while( USART_GetFlagStatus(USART1,USART_FLAG_TC)!= SET);	
 	return (ch);
