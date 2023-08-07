@@ -1,53 +1,0 @@
-Dependencies for Project 'LN_FXQ', Target 'Target 1': (DO NOT MODIFY !)
-CompilerVersion: <unknown>
-F (.\StartUp\core_cm3.c)(0x64CC67CC)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I.\StartUp -I.\Lib\inc -I.\Lib\src -I.\USER -I.\MATH -I.\CONFIG -I.\HARDWARE -I.\HAL-I D:\资料\四轴资料\STM32四轴\蓝鸟四轴\程序\蓝鸟四轴C程序V1\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o .\output\core_cm3.o --omf_browse .\output\core_cm3.crf --depend .\output\core_cm3.d)
-F (.\StartUp\system_stm32f10x.c)(0x64CC67CC)()
-F (.\StartUp\startup_stm32f10x_md.s)(0x64CC67CC)()
-F (.\StartUp\stm32f10x_it.c)(0x64CCF795)()
-F (.\USER\main.c)(0x64CCF7B4)()
-F (.\USER\delay.c)(0x64CC67CC)()
-F (.\USER\sys.c)(0x64CC6EA9)()
-F (.\USER\scheduler.c)(0x64CC67CC)()
-F (.\USER\INIT.c)(0x64CC6E3F)()
-F (.\USER\ALL_DATA.h)(0x64CC67CC)()
-F (.\USER\ALL_DEFINE.h)(0x64CC67CC)()
-F (.\Lib\src\misc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_adc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_bkp.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_can.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_cec.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_crc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_dac.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_dbgmcu.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_dma.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_exti.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_flash.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_fsmc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_gpio.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_i2c.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_iwdg.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_pwr.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_rcc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_rtc.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_sdio.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_spi.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_tim.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_usart.c)(0x64CC67C8)()
-F (.\Lib\src\stm32f10x_wwdg.c)(0x64CC67C8)()
-F (.\CONFIG\IIC_SOFTWARE.c)(0x64CCF0AB)()
-F (.\CONFIG\USART.c)(0x64CCF0AA)()
-F (.\CONFIG\GPIO.c)(0x64CC67C7)()
-F (.\CONFIG\TIM.c)(0x64CC67C7)()
-F (.\CONFIG\ADC.c)(0x64CCF0CD)()
-F (.\CONFIG\Spi.c)(0x64CCF0D4)()
-F (.\HARDWARE\LED.c)(0x64CC6ED3)()
-F (.\HARDWARE\nrf24l01.c)(0x64CC6DA7)()
-F (.\HARDWARE\mpu6050.c)(0x64CC6D9B)()
-F (.\HAL\ANO_DT.c)(0x64CC6DC1)()
-F (.\HAL\remote.c)(0x64CC6DD0)()
-F (.\HAL\control.c)(0x64CCF13E)()
-F (.\MATH\filter.c)(0x64CC67C8)()
-F (.\MATH\kalman.c)(0x64CC67C8)()
-F (.\MATH\imu.c)(0x64CC67C8)()
-F (.\MATH\myMath.c)(0x64CC67C8)()
-F (.\MATH\pid.c)(0x64CC67C8)()

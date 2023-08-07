@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "sys.h": "c",
+        "delay.h": "c",
+        "stm32f10x.h": "c",
+        "all_define.h": "c",
+        "led.h": "c",
+        "remote.h": "c",
+        "mpu6050.h": "c",
+        "all_data.h": "c"
+    }
+}
