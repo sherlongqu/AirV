@@ -1,7 +1,5 @@
 #define u8 unsigned char
 
-u8 i = 0x00;
-
 void TM_START()
 {
   // I2C Start
@@ -106,6 +104,16 @@ void printf_bin_8(unsigned char num)
   }
 }
 
+void printf_blink(int frequency)
+{
+  for (int i = 0; i < frequency; i++){
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500 / frequency);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500 / frequency);
+  }
+}
+
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -125,8 +133,14 @@ void loop()
         {
           digitalWrite(LED_BUILTIN, HIGH);
           I2C(inp1,inp2,inp3,inp4);
-          printf_bin_8(i);
-          i++;
+          printf_bin_8(inp1);
+          printf_blink(10);
+          printf_bin_8(inp2);
+          printf_blink(10);
+          printf_bin_8(inp3);
+          printf_blink(10);
+          printf_bin_8(inp4);
+          printf_blink(10);
         }
       }
     }
