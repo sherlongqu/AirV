@@ -6,7 +6,6 @@
 // defind function
 
 #define u8 unsigned char
-#define u16 unsigned int
 
 void TM_START()
 {
@@ -45,7 +44,6 @@ void TM_ACK()
 {
   digitalWrite(I2C_SCL, LOW);
   delay(5);
-  // digitalWrite(I2C_SDA, LOW); // test point
   while (digitalRead(I2C_SDA) == HIGH)
     ;
   digitalWrite(I2C_SCL, HIGH);
@@ -86,11 +84,11 @@ void I2C()
   TM_ACK();
   TM_WR(0x3f);
   TM_ACK();
-  TM_WR(0x3f);
+  TM_WR(0x6f);
   TM_ACK();
   TM_WR(0x3f);
   TM_ACK();
-  TM_WR(0x33);
+  TM_WR(0x6f);
   TM_ACK();
 
   // 写命令 开显示
@@ -115,5 +113,6 @@ void loop()
 {
   digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
   I2C();
+  delay(1000);
   digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage LOW
 }
