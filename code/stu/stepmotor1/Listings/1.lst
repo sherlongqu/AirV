@@ -1,0 +1,238 @@
+C51 COMPILER V9.60.7.0   1                                                                 08/14/2023 16:58:32 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 1
+OBJECT MODULE PLACED IN .\Objects\1.obj
+COMPILER INVOKED BY: C:\Program Files\Keil_v5\C51\BIN\C51.EXE 1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\1.lst) TABS(2) OBJECT(.\Objects\1.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          typedef unsigned int u16; // 对系统默认数据类型进行重定义
+   4          typedef unsigned char u8;
+   5          
+   6          // 定义ULN2003控制步进电机管脚(根据个人使用进行更改）
+   7          sbit IN1_A = P1 ^ 7;
+   8          sbit IN2_B = P1 ^ 6;
+   9          sbit IN3_C = P1 ^ 5;
+  10          sbit IN4_D = P1 ^ 4;
+  11          
+  12          // 定义独立按键控制脚（根据个人使用进行更改）
+  13          //  sbit KEY1=P1^1;
+  14          //  sbit KEY2=P1^0;
+  15          //  sbit KEY3=P1^2;
+  16          //  sbit KEY4=P1^3;
+  17          
+  18          // 使用宏定义独立按键按下的键值
+  19          //  #define KEY1_PRESS  1
+  20          //  #define KEY2_PRESS  2
+  21          //  #define KEY3_PRESS  3
+  22          //  #define KEY4_PRESS  4
+  23          //  #define KEY_UNPRESS 0
+  24          
+  25          // 定义步进电机速度，值越小，速度越快
+  26          // 最小不能小于1
+  27          #define STEPMOTOR_MAXSPEED 1
+  28          #define STEPMOTOR_MINSPEED 5
+  29          
+  30          /*******************************************************************************
+  31           * 函 数 名       : delay_10us
+  32           * 函数功能    : 延时函数，ten_us=1时，大约延时10us
+  33           * 输    入       : ten_us
+  34           * 输    出      : 无
+  35           *******************************************************************************/
+  36          // void delay_10us(u16 ten_us)
+  37          // {
+  38          //  while(ten_us--);
+  39          // }
+  40          
+  41          /*******************************************************************************
+  42           * 函 数 名       : delay_ms
+  43           * 函数功能    : ms延时函数，ms=1时，大约延时1ms
+  44           * 输    入       : ten_us
+  45           * 输    出      : 无
+  46           *******************************************************************************/
+  47          void delay_ms(u16 ms)
+  48          {
+  49   1          u16 i, j;
+  50   1          for (i = ms; i > 0; i--)
+  51   1              for (j = 110; j > 0; j--)
+  52   1                  ;
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   1                                                                 08/14/2023 16:58:32 PAGE 2   
+
+  55          /*******************************************************************************
+  56          * 函 数 名       : step_motor_28BYJ48_send_pulse
+  57          * 函数功能     : 输出一个数据给ULN2003从而实现向步进电机发送一个脉冲
+  58          * 输    入       : step：指定步进序号，可选值0~7
+  59                             dir：方向选择,1：顺时针,0：逆时针
+  60          * 输    出       : 无
+  61          *******************************************************************************/
+  62          void step_motor_28BYJ48_send_pulse(u8 step, u8 dir)
+  63          {
+  64   1          u8 temp = step;
+  65   1      
+  66   1          if (dir == 0)        // 如果为逆时针旋转
+  67   1              temp = 7 - step; // 调换节拍信号
+  68   1          switch (temp)        // 8个节拍控制：A->AB->B->BC->C->CD->D->DA
+  69   1          {
+  70   2          case 0:
+  71   2              IN1_A = 1;
+  72   2              IN2_B = 0;
+  73   2              IN3_C = 0;
+  74   2              IN4_D = 0;
+  75   2              break;
+  76   2          case 1:
+  77   2              IN1_A = 1;
+  78   2              IN2_B = 1;
+  79   2              IN3_C = 0;
+  80   2              IN4_D = 0;
+  81   2              break;
+  82   2          case 2:
+  83   2              IN1_A = 0;
+  84   2              IN2_B = 1;
+  85   2              IN3_C = 0;
+  86   2              IN4_D = 0;
+  87   2              break;
+  88   2          case 3:
+  89   2              IN1_A = 0;
+  90   2              IN2_B = 1;
+  91   2              IN3_C = 1;
+  92   2              IN4_D = 0;
+  93   2              break;
+  94   2          case 4:
+  95   2              IN1_A = 0;
+  96   2              IN2_B = 0;
+  97   2              IN3_C = 1;
+  98   2              IN4_D = 0;
+  99   2              break;
+ 100   2          case 5:
+ 101   2              IN1_A = 0;
+ 102   2              IN2_B = 0;
+ 103   2              IN3_C = 1;
+ 104   2              IN4_D = 1;
+ 105   2              break;
+ 106   2          case 6:
+ 107   2              IN1_A = 0;
+ 108   2              IN2_B = 0;
+ 109   2              IN3_C = 0;
+ 110   2              IN4_D = 1;
+ 111   2              break;
+ 112   2          case 7:
+ 113   2              IN1_A = 1;
+ 114   2              IN2_B = 0;
+ 115   2              IN3_C = 0;
+ 116   2              IN4_D = 1;
+C51 COMPILER V9.60.7.0   1                                                                 08/14/2023 16:58:32 PAGE 3   
+
+ 117   2              break;
+ 118   2          default:
+ 119   2              IN1_A = 0;
+ 120   2              IN2_B = 0;
+ 121   2              IN3_C = 0;
+ 122   2              IN4_D = 0;
+ 123   2              break; // 停止相序
+ 124   2          }
+ 125   1      }
+ 126          
+ 127          /*******************************************************************************
+ 128          * 函 数 名       : key_scan
+ 129          * 函数功能     : 检测独立按键是否按下，按下则返回对应键值
+ 130          * 输    入       : mode=0：单次扫描按键
+ 131                             mode=1：连续扫描按键
+ 132          * 输    出       : KEY1_PRESS：K1按下
+ 133                             KEY2_PRESS：K2按下
+ 134                             KEY3_PRESS：K3按下
+ 135                             KEY4_PRESS：K4按下
+ 136                             KEY_UNPRESS：未有按键按下
+ 137          *******************************************************************************/
+ 138          // u8 key_scan(u8 mode)
+ 139          // {
+ 140          //  static u8 key=1;
+ 141          
+ 142          //  if(mode)key=1;//连续扫描按键
+ 143          //  if(key==1&&(KEY1==0||KEY2==0||KEY3==0||KEY4==0))//任意按键按下
+ 144          //  {
+ 145          //    delay_10us(1000);//消抖
+ 146          //    key=0;
+ 147          //    if(KEY1==0)
+ 148          //      return KEY1_PRESS;
+ 149          //    else if(KEY2==0)
+ 150          //      return KEY2_PRESS;
+ 151          //    else if(KEY3==0)
+ 152          //      return KEY3_PRESS;
+ 153          //    else if(KEY4==0)
+ 154          //      return KEY4_PRESS;
+ 155          //  }
+ 156          //  else if(KEY1==1&&KEY2==1&&KEY3==1&&KEY4==1) //无按键按下
+ 157          //  {
+ 158          //    key=1;
+ 159          //  }
+ 160          //  return KEY_UNPRESS;
+ 161          // }
+ 162          
+ 163          /*******************************************************************************
+ 164           * 函 数 名       : main
+ 165           * 函数功能    : 主函数
+ 166           * 输    入       : 无
+ 167           * 输    出      : 无
+ 168           *******************************************************************************/
+ 169          void main()
+ 170          {
+ 171   1          u8 key = 0;
+ 172   1          u8 dir = 0;                    // 默认逆时针方向
+ 173   1          u8 speed = STEPMOTOR_MAXSPEED; // 默认最大速度旋转
+ 174   1          u8 step = 0;
+ 175   1          u8 s1 = 0;
+ 176   1      
+ 177   1          while (1)
+ 178   1          {
+C51 COMPILER V9.60.7.0   1                                                                 08/14/2023 16:58:32 PAGE 4   
+
+ 179   2              // key=key_scan(0);
+ 180   2              // if(key==KEY1_PRESS)//换向
+ 181   2              // {
+ 182   2              //  dir=!dir;
+ 183   2              // }
+ 184   2              // else if(key==KEY2_PRESS)//加速
+ 185   2              // {
+ 186   2              //  if(speed>STEPMOTOR_MAXSPEED)
+ 187   2              //    speed-=1;
+ 188   2              // }
+ 189   2              // else if(key==KEY3_PRESS)//减速
+ 190   2              // {
+ 191   2              //  if(speed<STEPMOTOR_MINSPEED)
+ 192   2              //    speed+=1;
+ 193   2              // }
+ 194   2              if (s1 == 300)
+ 195   2              {
+ 196   3                  dir = !dir;
+ 197   3                  s1 = 0;
+ 198   3              }
+ 199   2              
+ 200   2              step_motor_28BYJ48_send_pulse(step++, dir);
+ 201   2              if (step == 8)
+ 202   2              {
+ 203   3                  step = 0;
+ 204   3              }
+ 205   2              delay_ms(speed);
+ 206   2              s1++;
+ 207   2          }
+ 208   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    192    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

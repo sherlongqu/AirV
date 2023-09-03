@@ -1,0 +1,385 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    09/01/2023  14:36:40  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+C:\PROGRAM FILES\KEIL_V5\C51\BIN\BL51.EXE .\Objects\89C52main.obj TO .\Objects\tm1637 PRINT (.\Listings\tm1637.m51) RAMS
+>> IZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\89C52main.obj (89C52MAIN)
+  C:\PROGRAM FILES\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\PROGRAM FILES\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\PROGRAM FILES\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+
+
+LINK MAP OF MODULE:  .\Objects\tm1637 (89C52MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         ?DT?_TM1637_WRITE_DISPLAY_BYTES?89C52MAIN
+            DATA    000DH     0001H     UNIT         _DATA_GROUP_
+                    000EH     0012H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     004CH     UNIT         ?PR?TM1637_INIT?89C52MAIN
+            CODE    084CH     003FH     UNIT         ?C?LIB_CODE
+            CODE    088BH     003CH     UNIT         ?PR?_TM1637_WRITE_DISPLAY_BYTES?89C52MAIN
+            CODE    08C7H     0021H     UNIT         ?PR?TM1637?89C52MAIN
+            CODE    08E8H     0020H     UNIT         ?PR?_TM1637_WRITE_DISPLAY_BYTE?89C52MAIN
+            CODE    0908H     001CH     UNIT         ?PR?_DELAY?89C52MAIN
+            CODE    0924H     0019H     UNIT         ?PR?_I2C_WRITE_BYTE?89C52MAIN
+            CODE    093DH     0016H     UNIT         ?PR?I2C_CHECK_ACK?89C52MAIN
+            CODE    0953H     0015H     UNIT         ?PR?_TM1637_SHOW_DIGIT?89C52MAIN
+            CODE    0968H     0012H     UNIT         ?PR?TM1637_DISPLAY_SWITCH_AND_BRIGHT?89C52MAIN
+            CODE    097AH     0010H     UNIT         ?CO?89C52MAIN
+            CODE    098AH     000DH     UNIT         ?PR?I2C_SEND_ACK?89C52MAIN
+            CODE    0997H     000CH     UNIT         ?PR?_TM1637_WRITE_COMMAND_BYTE?89C52MAIN
+            CODE    09A3H     000CH     UNIT         ?C_C51STARTUP
+            CODE    09AFH     000BH     UNIT         ?PR?I2C_STOP?89C52MAIN
+            CODE    09BAH     000AH     UNIT         ?PR?I2C_START?89C52MAIN
+            CODE    09C4H     0008H     UNIT         ?PR?I2C_DELAY?89C52MAIN
+            CODE    09CCH     0003H     UNIT         ?PR?MAIN?89C52MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\tm1637 (89C52MAIN)
+
+
+SEGMENT                                             BIT_GROUP          DATA_GROUP 
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 2
+
+
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?89C52MAIN
+
+?PR?MAIN?89C52MAIN                               -----    -----      -----    -----
+  +--> ?PR?TM1637?89C52MAIN
+
+?PR?TM1637?89C52MAIN                             -----    -----      -----    -----
+  +--> ?PR?TM1637_INIT?89C52MAIN
+  +--> ?PR?_TM1637_SHOW_DIGIT?89C52MAIN
+  +--> ?PR?_DELAY?89C52MAIN
+
+?PR?TM1637_INIT?89C52MAIN                        -----    -----      -----    -----
+  +--> ?PR?TM1637_DISPLAY_SWITCH_AND_BRIGHT?...
+  +--> ?PR?_TM1637_WRITE_DISPLAY_BYTE?89C52MAIN
+  +--> ?PR?_DELAY?89C52MAIN
+
+?PR?TM1637_DISPLAY_SWITCH_AND_BRIGHT?...         0020H.0  0000H.1    000DH    0001H
+  +--> ?PR?_TM1637_WRITE_COMMAND_BYTE?89C52MAIN
+
+?PR?_TM1637_WRITE_COMMAND_BYTE?89C52MAIN         -----    -----      -----    -----
+  +--> ?PR?I2C_START?89C52MAIN
+  +--> ?PR?_I2C_WRITE_BYTE?89C52MAIN
+  +--> ?PR?I2C_CHECK_ACK?89C52MAIN
+  +--> ?PR?I2C_STOP?89C52MAIN
+
+?PR?I2C_START?89C52MAIN                          -----    -----      -----    -----
+  +--> ?PR?I2C_DELAY?89C52MAIN
+
+?PR?_I2C_WRITE_BYTE?89C52MAIN                    -----    -----      -----    -----
+  +--> ?PR?I2C_DELAY?89C52MAIN
+
+?PR?I2C_CHECK_ACK?89C52MAIN                      -----    -----      -----    -----
+  +--> ?PR?_I2C_WRITE_BYTE?89C52MAIN
+  +--> ?PR?I2C_DELAY?89C52MAIN
+
+?PR?I2C_STOP?89C52MAIN                           -----    -----      -----    -----
+  +--> ?PR?I2C_DELAY?89C52MAIN
+
+?PR?_TM1637_WRITE_DISPLAY_BYTE?89C52MAIN         -----    -----      -----    -----
+  +--> ?PR?I2C_START?89C52MAIN
+  +--> ?PR?I2C_CHECK_ACK?89C52MAIN
+  +--> ?PR?I2C_STOP?89C52MAIN
+  +--> ?PR?_I2C_WRITE_BYTE?89C52MAIN
+
+?PR?_TM1637_SHOW_DIGIT?89C52MAIN                 0020H.0  0000H.1    -----    -----
+  +--> ?CO?89C52MAIN
+  +--> ?PR?_TM1637_WRITE_DISPLAY_BYTE?89C52MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\tm1637 (89C52MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 3
+
+
+  -------         MODULE        89C52MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  B:0090H.1       PUBLIC        I2C_SCL
+  C:0800H         PUBLIC        TM1637_init
+  C:0953H         PUBLIC        _TM1637_show_digit
+  C:090CH         PUBLIC        _delay
+  C:09CCH         PUBLIC        main
+  C:0943H         PUBLIC        I2C_check_ack
+  C:09CBH         PUBLIC        I2C_delay
+  C:0968H         PUBLIC        TM1637_display_switch_and_bright
+  C:09BAH         PUBLIC        I2C_start
+  C:098AH         PUBLIC        I2C_send_ack
+  C:0997H         PUBLIC        _TM1637_write_command_byte
+  C:0924H         PUBLIC        _I2C_write_byte
+  C:09AFH         PUBLIC        I2C_stop
+  C:088BH         PUBLIC        _TM1637_write_display_bytes
+  C:097AH         PUBLIC        TM1637_SEG_TAB
+  C:08C7H         PUBLIC        TM1637
+  C:08E8H         PUBLIC        _TM1637_write_display_byte
+  B:0090H.0       PUBLIC        I2C_SDA
+  C:0908H         SYMBOL        L?0059
+  -------         PROC          L?0058
+  -------         ENDPROC       L?0058
+  C:0908H         SYMBOL        L?0059
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        i
+  C:090CH         LINE#         7
+  C:090CH         LINE#         8
+  C:090CH         LINE#         9
+  C:0923H         LINE#         11
+  -------         ENDPROC       _DELAY
+  C:09C6H         SYMBOL        L?0057
+  -------         PROC          L?0056
+  -------         ENDPROC       L?0056
+  C:09C6H         SYMBOL        L?0057
+  -------         PROC          I2C_DELAY
+  C:09CBH         LINE#         19
+  C:09CBH         LINE#         20
+  C:09CBH         LINE#         21
+  C:09CBH         LINE#         23
+  -------         ENDPROC       I2C_DELAY
+  -------         PROC          I2C_START
+  C:09BAH         LINE#         26
+  C:09BAH         LINE#         27
+  C:09BAH         LINE#         28
+  C:09BCH         LINE#         29
+  C:09BEH         LINE#         30
+  C:09C1H         LINE#         32
+  C:09C3H         LINE#         33
+  -------         ENDPROC       I2C_START
+  -------         PROC          _I2C_WRITE_BYTE
+  D:0007H         SYMBOL        byte_to_write
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0924H         LINE#         36
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 4
+
+
+  C:0924H         LINE#         37
+  C:0924H         LINE#         40
+  C:0926H         LINE#         41
+  C:0926H         LINE#         42
+  C:0928H         LINE#         43
+  C:092CH         LINE#         44
+  C:092CH         LINE#         46
+  C:092CH         LINE#         47
+  C:092FH         LINE#         49
+  C:0931H         LINE#         50
+  C:0934H         LINE#         52
+  C:0938H         LINE#         53
+  C:093CH         LINE#         54
+  -------         ENDPROC       _I2C_WRITE_BYTE
+  C:093FH         SYMBOL        L?0055
+  -------         PROC          L?0054
+  -------         ENDPROC       L?0054
+  C:093FH         SYMBOL        L?0055
+  -------         PROC          I2C_CHECK_ACK
+  C:0943H         LINE#         57
+  C:0943H         LINE#         58
+  C:0943H         LINE#         59
+  C:0945H         LINE#         60
+  C:0948H         LINE#         62
+  C:094BH         LINE#         63
+  C:094BH         LINE#         65
+  C:094BH         LINE#         67
+  C:094DH         LINE#         68
+  C:0950H         LINE#         70
+  C:0952H         LINE#         71
+  -------         ENDPROC       I2C_CHECK_ACK
+  -------         PROC          I2C_SEND_ACK
+  C:098AH         LINE#         73
+  C:098AH         LINE#         74
+  C:098AH         LINE#         75
+  C:098AH         LINE#         76
+  C:098AH         LINE#         78
+  C:098AH         LINE#         79
+  C:098DH         LINE#         81
+  C:098FH         LINE#         82
+  C:0992H         LINE#         84
+  C:0994H         LINE#         85
+  -------         ENDPROC       I2C_SEND_ACK
+  -------         PROC          I2C_STOP
+  C:09AFH         LINE#         88
+  C:09AFH         LINE#         89
+  C:09AFH         LINE#         90
+  C:09B1H         LINE#         91
+  C:09B4H         LINE#         93
+  C:09B4H         LINE#         94
+  C:09B4H         LINE#         96
+  C:09B4H         LINE#         97
+  C:09B7H         LINE#         99
+  C:09B9H         LINE#         100
+  -------         ENDPROC       I2C_STOP
+  -------         PROC          _TM1637_WRITE_COMMAND_BYTE
+  D:0007H         SYMBOL        command
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 5
+
+
+  C:0997H         LINE#         139
+  C:0997H         LINE#         140
+  C:0997H         LINE#         141
+  C:099AH         LINE#         142
+  C:099DH         LINE#         143
+  C:09A0H         LINE#         144
+  -------         ENDPROC       _TM1637_WRITE_COMMAND_BYTE
+  -------         PROC          TM1637_DISPLAY_SWITCH_AND_BRIGHT
+  B:0020H.0       SYMBOL        enable_display
+  D:000DH         SYMBOL        bright
+  C:0968H         LINE#         148
+  C:0968H         LINE#         149
+  C:0968H         LINE#         150
+  -------         ENDPROC       TM1637_DISPLAY_SWITCH_AND_BRIGHT
+  -------         PROC          _TM1637_WRITE_DISPLAY_BYTES
+  D:0005H         SYMBOL        first_addr
+  D:0009H         SYMBOL        bytes_to_write
+  D:000CH         SYMBOL        num_of_bytes
+  -------         DO            
+  D:0005H         SYMBOL        i
+  -------         ENDDO         
+  C:088BH         LINE#         153
+  C:0893H         LINE#         156
+  C:0893H         LINE#         159
+  C:0896H         LINE#         160
+  C:089BH         LINE#         161
+  C:089EH         LINE#         162
+  C:08A1H         LINE#         164
+  C:08A4H         LINE#         165
+  C:08A5H         LINE#         166
+  C:08A8H         LINE#         168
+  C:08B0H         LINE#         169
+  C:08B0H         LINE#         170
+  C:08BEH         LINE#         171
+  C:08C1H         LINE#         172
+  C:08C4H         LINE#         174
+  -------         ENDPROC       _TM1637_WRITE_DISPLAY_BYTES
+  -------         PROC          _TM1637_WRITE_DISPLAY_BYTE
+  D:0004H         SYMBOL        addr
+  D:0005H         SYMBOL        segments
+  C:08E8H         LINE#         178
+  C:08EAH         LINE#         179
+  C:08EAH         LINE#         180
+  C:08EDH         LINE#         181
+  C:08F0H         LINE#         182
+  C:08F3H         LINE#         183
+  C:08F6H         LINE#         185
+  C:08F9H         LINE#         186
+  C:08FAH         LINE#         187
+  C:08FDH         LINE#         189
+  C:0902H         LINE#         190
+  C:0905H         LINE#         191
+  -------         ENDPROC       _TM1637_WRITE_DISPLAY_BYTE
+  -------         PROC          _TM1637_SHOW_DIGIT
+  D:0007H         SYMBOL        pos
+  D:0005H         SYMBOL        digit
+  B:0020H.0       SYMBOL        with_dot
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 6
+
+
+  C:0953H         LINE#         194
+  C:0953H         LINE#         195
+  C:0953H         LINE#         196
+  -------         ENDPROC       _TM1637_SHOW_DIGIT
+  -------         PROC          TM1637_INIT
+  -------         DO            
+  D:0003H         SYMBOL        i
+  -------         ENDDO         
+  C:0800H         LINE#         199
+  C:0800H         LINE#         200
+  C:0800H         LINE#         203
+  C:0808H         LINE#         205
+  C:080AH         LINE#         206
+  C:080AH         LINE#         207
+  C:0811H         LINE#         208
+  C:0815H         LINE#         210
+  C:0818H         LINE#         212
+  C:081AH         LINE#         213
+  C:081AH         LINE#         214
+  C:0821H         LINE#         215
+  C:0825H         LINE#         217
+  C:0828H         LINE#         219
+  C:082AH         LINE#         220
+  C:082AH         LINE#         221
+  C:0831H         LINE#         222
+  C:0835H         LINE#         224
+  C:0838H         LINE#         226
+  C:083AH         LINE#         227
+  C:083AH         LINE#         228
+  C:0841H         LINE#         229
+  C:0845H         LINE#         231
+  -------         ENDPROC       TM1637_INIT
+  -------         PROC          TM1637
+  -------         DO            
+  D:0003H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:08C7H         LINE#         234
+  C:08C7H         LINE#         235
+  C:08C7H         LINE#         238
+  C:08CAH         LINE#         240
+  C:08CAH         LINE#         241
+  C:08CAH         LINE#         242
+  C:08CCH         LINE#         243
+  C:08CCH         LINE#         244
+  C:08CEH         LINE#         245
+  C:08CEH         LINE#         246
+  C:08D7H         LINE#         247
+  C:08DBH         LINE#         249
+  C:08E2H         LINE#         250
+  -------         ENDPROC       TM1637
+  -------         PROC          MAIN
+  C:09CCH         LINE#         254
+  C:09CCH         LINE#         255
+  C:09CCH         LINE#         256
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        89C52MAIN
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  09/01/2023  14:36:40  PAGE 7
+
+
+
+  -------         MODULE        ?C?CLDOPTR
+  C:084CH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?IMUL
+  C:0879H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I2C_SEND_ACK?89C52MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_TM1637_WRITE_DISPLAY_BYTES?89C52MAIN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0184H BYTE (18%) *
+******************************************************************************
+
+Program Size: data=15.1 xdata=0 code=466
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)

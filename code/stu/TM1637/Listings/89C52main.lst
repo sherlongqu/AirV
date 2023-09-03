@@ -1,0 +1,289 @@
+C51 COMPILER V9.60.7.0   89C52MAIN                                                         09/01/2023 14:36:40 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 89C52MAIN
+OBJECT MODULE PLACED IN .\Objects\89C52main.obj
+COMPILER INVOKED BY: C:\Program Files\Keil_v5\C51\BIN\C51.EXE 89C52main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PR
+                    -INT(.\Listings\89C52main.lst) TABS(2) OBJECT(.\Objects\89C52main.obj)
+
+line level    source
+
+   1          #define TM1637_BRIGHTNESS 7
+   2          
+   3          typedef unsigned char u8;
+   4          typedef unsigned int u16;
+   5          
+   6          // "void delay(u16 i)" will cause the program to wait for "i" milliseconds
+   7          void delay(u16 i)
+   8          {
+   9   1          for (i = i * 16383; i > 0; i--)
+  10   1              ;
+  11   1      }
+  12          
+  13          sfr P1 = 0x90;
+  14          
+  15          sbit I2C_SCL = P1 ^ 1;
+  16          sbit I2C_SDA = P1 ^ 0;
+  17          
+  18          // "void I2C_delay()" will cause the program wait a machine cycle
+  19          void I2C_delay()
+  20          {
+  21   1          while (0)
+  22   1              ;
+  23   1      }
+  24          
+  25          // Start I2C
+  26          void I2C_start()
+  27          {
+  28   1          I2C_SCL = 1;
+  29   1          I2C_SDA = 1;
+  30   1          I2C_delay();
+  31   1      
+  32   1          I2C_SDA = 0;
+  33   1      }
+  34          
+  35          // I2C bus write 1 byte
+  36          void I2C_write_byte(u8 byte_to_write)
+  37          {
+  38   1          u8 i;
+  39   1      
+  40   1          for (i = 0; i < 8; i++)
+  41   1          {
+  42   2              I2C_SCL = 0;
+  43   2              I2C_SDA = byte_to_write & 0x01;
+  44   2              I2C_delay();
+  45   2      
+  46   2              I2C_SCL = 1;
+  47   2              I2C_delay();
+  48   2      
+  49   2              I2C_SCL = 0;
+  50   2              I2C_delay();
+  51   2      
+  52   2              byte_to_write >>= 1;
+  53   2          }
+  54   1      }
+C51 COMPILER V9.60.7.0   89C52MAIN                                                         09/01/2023 14:36:40 PAGE 2   
+
+  55          
+  56          // I2C check response bit
+  57          void I2C_check_ack()
+  58          {
+  59   1          I2C_SCL = 0;
+  60   1          I2C_delay();
+  61   1      
+  62   1          while (I2C_SDA)
+  63   1          {
+  64   2              ;
+  65   2          }
+  66   1      
+  67   1          I2C_SCL = 1;
+  68   1          I2C_delay();
+  69   1      
+  70   1          I2C_SCL = 0;
+  71   1      }
+  72          
+  73          void I2C_send_ack()
+  74          {
+  75   1          I2C_SDA = 0;
+  76   1          I2C_delay();
+  77   1      
+  78   1          I2C_SCL = 1;
+  79   1          I2C_delay();
+  80   1      
+  81   1          I2C_SCL = 0;
+  82   1          I2C_delay();
+  83   1      
+  84   1          I2C_SDA = 1;
+  85   1          I2C_delay();
+  86   1      }
+  87          
+  88          void I2C_stop()
+  89          {
+  90   1          I2C_SCL = 0;
+  91   1          I2C_delay();
+  92   1      
+  93   1          I2C_SDA = 0;
+  94   1          I2C_delay();
+  95   1      
+  96   1          I2C_SCL = 1;
+  97   1          I2C_delay();
+  98   1      
+  99   1          I2C_SDA = 1;
+ 100   1      }
+ 101          
+ 102          // For TM1637's code
+ 103          
+ 104          code u8 TM1637_SEG_TAB[] =
+ 105              {
+ 106                  0x3F // 00111111 0
+ 107                  ,
+ 108                  0x06 // 00000110 1
+ 109                  ,
+ 110                  0x5B // 01011011 2
+ 111                  ,
+ 112                  0x4F // 01001111 3
+ 113                  ,
+ 114                  0x66 // 01100110 4
+ 115                  ,
+ 116                  0x6d // 01101101 5
+C51 COMPILER V9.60.7.0   89C52MAIN                                                         09/01/2023 14:36:40 PAGE 3   
+
+ 117                  ,
+ 118                  0x7d // 01111101 6
+ 119                  ,
+ 120                  0x07 // 00000111 7
+ 121                  ,
+ 122                  0x7F // 01111111 8
+ 123                  ,
+ 124                  0x6F // 01101111 9
+ 125                  ,
+ 126                  0x77 // 01110111 A
+ 127                  ,
+ 128                  0x7C // 01111100 b
+ 129                  ,
+ 130                  0x39 // 00111001 C
+ 131                  ,
+ 132                  0x5E // 01011110 d
+ 133                  ,
+ 134                  0x79 // 01111001 E
+ 135                  ,
+ 136                  0x71 // 01110001 F
+ 137          };
+ 138          
+ 139          void TM1637_write_command_byte(u8 command)
+ 140          {
+ 141   1          I2C_start();
+ 142   1          I2C_write_byte(command);
+ 143   1          I2C_check_ack();
+ 144   1          I2C_stop();
+ 145   1      }
+ 146          
+ 147          // bright : 0 - 7
+ 148          void TM1637_display_switch_and_bright(bit enable_display, u8 bright)
+ 149          {
+ 150   1          TM1637_write_command_byte(0x80 + (enable_display ? 0x08 : 0x00) + bright);
+ 151   1      }
+ 152          
+ 153          void TM1637_write_display_bytes(u8 first_addr,
+ 154                                          u8 bytes_to_write[],
+ 155                                          u8 num_of_bytes)
+ 156          {
+ 157   1          u8 i;
+ 158   1      
+ 159   1          I2C_start();
+ 160   1          I2C_write_byte(0x40);
+ 161   1          I2C_check_ack();
+ 162   1          I2C_stop();
+ 163   1      
+ 164   1          I2C_start();
+ 165   1          I2C_write_byte(0xC0 + first_addr);
+ 166   1          I2C_check_ack();
+ 167   1      
+ 168   1          for (i = 0; i < num_of_bytes; i++)
+ 169   1          {
+ 170   2              I2C_write_byte(bytes_to_write[i]);
+ 171   2              I2C_check_ack();
+ 172   2          }
+ 173   1      
+ 174   1          I2C_stop();
+ 175   1      }
+ 176          
+ 177          // addr: 0 - 5
+ 178          void TM1637_write_display_byte(u8 addr, u8 segments)
+C51 COMPILER V9.60.7.0   89C52MAIN                                                         09/01/2023 14:36:40 PAGE 4   
+
+ 179          {
+ 180   1          I2C_start();
+ 181   1          I2C_write_byte(0x40 + addr);
+ 182   1          I2C_check_ack();
+ 183   1          I2C_stop();
+ 184   1      
+ 185   1          I2C_start();
+ 186   1          I2C_write_byte(0xC0 + addr);
+ 187   1          I2C_check_ack();
+ 188   1      
+ 189   1          I2C_write_byte(segments);
+ 190   1          I2C_check_ack();
+ 191   1          I2C_stop();
+ 192   1      }
+ 193          
+ 194          void TM1637_show_digit(u8 pos, u8 digit, bit with_dot)
+ 195          {
+ 196   1          TM1637_write_display_byte(pos, TM1637_SEG_TAB[digit] | (with_dot ? 0x20 : 0x00));
+ 197   1      }
+ 198          
+ 199          void TM1637_init()
+ 200          {
+ 201   1          u8 i;
+ 202   1      
+ 203   1          TM1637_display_switch_and_bright(1, TM1637_BRIGHTNESS);
+ 204   1      
+ 205   1          for (i = 0; i < 6; i++)
+ 206   1          {
+ 207   2              TM1637_write_display_byte(i, 0xFF);
+ 208   2          }
+ 209   1      
+ 210   1          delay(200);
+ 211   1      
+ 212   1          for (i = 0; i < 6; i++)
+ 213   1          {
+ 214   2              TM1637_write_display_byte(i, 0x00);
+ 215   2          }
+ 216   1      
+ 217   1          delay(200);
+ 218   1      
+ 219   1          for (i = 0; i < 6; i++)
+ 220   1          {
+ 221   2              TM1637_write_display_byte(i, 0xFF);
+ 222   2          }
+ 223   1      
+ 224   1          delay(200);
+ 225   1      
+ 226   1          for (i = 0; i < 6; i++)
+ 227   1          {
+ 228   2              TM1637_write_display_byte(i, 0x00);
+ 229   2          }
+ 230   1      
+ 231   1          delay(200);
+ 232   1      }
+ 233          
+ 234          void TM1637()
+ 235          {
+ 236   1          u8 i, j;
+ 237   1      
+ 238   1          TM1637_init();
+ 239   1      
+ 240   1          while (1)
+C51 COMPILER V9.60.7.0   89C52MAIN                                                         09/01/2023 14:36:40 PAGE 5   
+
+ 241   1          {
+ 242   2              for (i = 0; i < 16; i++)
+ 243   2              {
+ 244   3                  for (j = 0; j < 6; j++)
+ 245   3                  {
+ 246   4                      TM1637_show_digit(j, i, 0);
+ 247   4                  }
+ 248   3      
+ 249   3                  delay(1000);
+ 250   3              }
+ 251   2          }
+ 252   1      }
+ 253          
+ 254          void main()
+ 255          {
+ 256   1          TM1637();
+ 257   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    372    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -133,14 +133,16 @@ void loop()
         {
           digitalWrite(LED_BUILTIN, HIGH);
           I2C(inp1,inp2,inp3,inp4);
-          printf_bin_8(inp1);
-          printf_blink(10);
-          printf_bin_8(inp2);
-          printf_blink(10);
-          printf_bin_8(inp3);
-          printf_blink(10);
-          printf_bin_8(inp4);
-          printf_blink(10);
+          digitalWrite(LED_BUILTIN, LOW);
+          delay(100);
+          // printf_bin_8(inp1);
+          // printf_blink(10);
+          // printf_bin_8(inp2);
+          // printf_blink(10);
+          // printf_bin_8(inp3);
+          // printf_blink(10);
+          // printf_bin_8(inp4);
+          // printf_blink(10);
         }
       }
     }

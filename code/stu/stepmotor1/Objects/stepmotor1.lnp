@@ -1,0 +1,3 @@
+".\Objects\1.obj" 
+TO ".\Objects\stepmotor1" 
+PRINT(".\Listings\stepmotor1.m51") RAMSIZE(256) 

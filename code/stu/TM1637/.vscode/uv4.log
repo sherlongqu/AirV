@@ -1,0 +1,13 @@
+Build target 'Target 1'
+compiling 89C52main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I2C_SEND_ACK?89C52MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_TM1637_WRITE_DISPLAY_BYTES?89C52MAIN
+
+Program Size: data=15.1 xdata=0 code=466
+creating hex file from ".\Objects\tm1637"...
+".\Objects\tm1637" - 0 Error(s), 2 Warning(s).
+Build Time Elapsed:  00:00:00
